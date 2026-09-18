@@ -3,153 +3,291 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-
 <title>Agua del Bosque Control</title>
-
 <link rel="manifest" href="manifest.json">
 
 <style>
 body{
-  font-family:Arial;
+  font-family:Arial,sans-serif;
   margin:0;
   background:#f4f8f8;
-  color:#123
+  color:#123;
 }
-
 .top{
   background:linear-gradient(120deg,#063b5c,#07845f);
   color:white;
-  padding:18px
+  padding:18px;
 }
-
 .wrap{
   max-width:1180px;
   margin:auto;
-  padding:18px
+  padding:18px;
 }
-
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  gap:12px
+  gap:12px;
 }
-
 .card{
   background:white;
   padding:16px;
   border-radius:16px;
-  box-shadow:0 4px 18px #0001
+  box-shadow:0 4px 18px #0001;
 }
-
 .big{
   font-size:30px;
-  font-weight:800
+  font-weight:800;
 }
-
-.nav button,
-.btn{
+.nav button,.btn{
   border:0;
   border-radius:10px;
   padding:10px 13px;
   margin:4px;
   background:#087b5c;
   color:white;
-  cursor:pointer
+  cursor:pointer;
 }
-
 .nav button{
-  background:#ffffff22
+  background:#ffffff22;
 }
-
 .panel{
-  display:none
+  display:none;
 }
-
 .panel.active{
-  display:block
+  display:block;
 }
-
-input,
-select{
+input,select{
   padding:10px;
   border:1px solid #ccd;
   border-radius:8px;
   margin:5px;
-  width:min(260px,90%)
+  width:min(260px,90%);
+  box-sizing:border-box;
 }
-
 table{
   width:100%;
   border-collapse:collapse;
-  background:white
+  background:white;
 }
-
-th,
-td{
+th,td{
   padding:10px;
   border-bottom:1px solid #eee;
-  text-align:left
+  text-align:left;
 }
-
 .map{
   height:330px;
   border-radius:16px;
   background:linear-gradient(#dff3e8,#cfe6ef);
   position:relative;
-  overflow:hidden
+  overflow:hidden;
 }
-
 .pin{
   position:absolute;
   background:#087b5c;
   color:white;
   padding:7px;
   border-radius:12px;
-  font-size:12px
+  font-size:12px;
 }
-
 .muted{
-  color:#678
+  color:#678;
 }
-
 .danger{
-  background:#b94141
+  background:#b94141;
 }
-
 .tag{
   display:inline-block;
   background:#e5f5ef;
   color:#087b5c;
   padding:5px 8px;
   border-radius:20px;
-  font-size:12px
+  font-size:12px;
+}
+
+/* LOGIN */
+
+#loginScreen{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  box-sizing:border-box;
+  background:linear-gradient(135deg,#063b5c,#07845f);
+}
+
+.loginCard{
+  background:white;
+  width:min(390px,100%);
+  padding:30px;
+  border-radius:22px;
+  box-shadow:0 18px 50px #0003;
+  text-align:center;
+}
+
+.loginCard h1{
+  margin-bottom:5px;
+  color:#063b5c;
+}
+
+.loginCard input{
+  width:100%;
+  max-width:none;
+  margin:7px 0;
+}
+
+.loginCard .btn{
+  width:100%;
+  margin:10px 0 0 0;
+  padding:12px;
+}
+
+#loginMessage{
+  margin-top:12px;
+  font-size:14px;
+}
+
+#app{
+  display:none;
+}
+
+.userbar{
+  font-size:13px;
+  margin-top:10px;
+  display:flex;
+  gap:8px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+
+.logout{
+  background:#ffffff22;
+  border:1px solid #ffffff55;
+  color:white;
+  padding:6px 10px;
+  border-radius:8px;
+  cursor:pointer;
 }
 </style>
 </head>
 
 <body>
 
+<!-- =====================================================
+     PANTALLA DE INICIO DE SESIÓN
+     ===================================================== -->
+
+<div id="loginScreen">
+
+  <div class="loginCard">
+
+    <h1>Agua del Bosque</h1>
+
+    <p class="muted">
+      Control 4.0
+    </p>
+
+    <h3>Inicio de sesión</h3>
+
+    <input
+      id="loginEmail"
+      type="email"
+      placeholder="Correo electrónico"
+      autocomplete="username"
+    >
+
+    <input
+      id="loginPassword"
+      type="password"
+      placeholder="Contraseña"
+      autocomplete="current-password"
+    >
+
+    <button
+      class="btn"
+      onclick="login()"
+    >
+      Ingresar
+    </button>
+
+    <div
+      id="loginMessage"
+      class="muted"
+    ></div>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     APLICACIÓN
+     ===================================================== -->
+
+<div id="app">
+
 <div class="top">
+
   <div class="wrap">
 
     <b>AGUA DEL BOSQUE CONTROL 4.0</b>
 
+    <div class="userbar">
+
+      <span id="currentUser"></span>
+
+      <button
+        class="logout"
+        onclick="logout()"
+      >
+        Cerrar sesión
+      </button>
+
+    </div>
+
     <div class="nav">
-      <button onclick="show('inicio')">Inicio</button>
-      <button onclick="show('clientes')">Clientes</button>
-      <button onclick="show('ventas')">Ventas</button>
-      <button onclick="show('rutas')">Mapa/Rutas</button>
-      <button onclick="show('produccion')">Producción</button>
-      <button onclick="show('inventario')">Inventario</button>
-      <button onclick="show('reportes')">Reportes</button>
+
+      <button onclick="show('inicio')">
+        Inicio
+      </button>
+
+      <button onclick="show('clientes')">
+        Clientes
+      </button>
+
+      <button onclick="show('ventas')">
+        Ventas
+      </button>
+
+      <button onclick="show('rutas')">
+        Mapa/Rutas
+      </button>
+
+      <button onclick="show('produccion')">
+        Producción
+      </button>
+
+      <button onclick="show('inventario')">
+        Inventario
+      </button>
+
+      <button onclick="show('reportes')">
+        Reportes
+      </button>
+
     </div>
 
   </div>
+
 </div>
+
 
 <main class="wrap">
 
-<section id="inicio" class="panel active">
+<section
+  id="inicio"
+  class="panel active"
+>
 
 <h2>Tablero de control</h2>
 
@@ -184,26 +322,42 @@ td{
 
 <h3>Actividad reciente</h3>
 
-<div class="card" id="activity">
+<div
+  class="card"
+  id="activity"
+>
 Aún no hay movimientos.
 </div>
 
 </section>
 
 
-<section id="clientes" class="panel">
+<section
+  id="clientes"
+  class="panel"
+>
 
 <h2>Clientes</h2>
 
 <div class="card">
 
-<input id="cname" placeholder="Nombre / negocio">
+<input
+  id="cname"
+  placeholder="Nombre / negocio"
+>
 
-<input id="cphone" placeholder="Celular">
+<input
+  id="cphone"
+  placeholder="Celular"
+>
 
-<input id="caddress" placeholder="Dirección / sector">
+<input
+  id="caddress"
+  placeholder="Dirección / sector"
+>
 
 <select id="ctype">
+
 <option>Hogar</option>
 <option>Conjunto</option>
 <option>Empresa</option>
@@ -211,9 +365,13 @@ Aún no hay movimientos.
 <option>Restaurante</option>
 <option>Gimnasio</option>
 <option>Distribuidor</option>
+
 </select>
 
-<button class="btn" onclick="addClient()">
+<button
+  class="btn"
+  onclick="addClient()"
+>
 Guardar cliente
 </button>
 
@@ -224,7 +382,10 @@ Guardar cliente
 </section>
 
 
-<section id="ventas" class="panel">
+<section
+  id="ventas"
+  class="panel"
+>
 
 <h2>Registrar venta</h2>
 
@@ -233,32 +394,40 @@ Guardar cliente
 <select id="vclient"></select>
 
 <input
-id="vqty"
-type="number"
-min="1"
-value="1"
-placeholder="Cantidad">
+  id="vqty"
+  type="number"
+  min="1"
+  value="1"
+  placeholder="Cantidad"
+>
 
 <input
-id="vprice"
-type="number"
-value="7000"
-placeholder="Precio unitario">
+  id="vprice"
+  type="number"
+  value="7000"
+  placeholder="Precio unitario"
+>
 
 <select id="vpay">
+
 <option>Efectivo</option>
 <option>Transferencia</option>
 <option>Crédito</option>
+
 </select>
 
 <input
-id="vempties"
-type="number"
-min="0"
-value="0"
-placeholder="Envases recuperados">
+  id="vempties"
+  type="number"
+  min="0"
+  value="0"
+  placeholder="Envases recuperados"
+>
 
-<button class="btn" onclick="addSale()">
+<button
+  class="btn"
+  onclick="addSale()"
+>
 Registrar venta
 </button>
 
@@ -269,7 +438,10 @@ Registrar venta
 </section>
 
 
-<section id="rutas" class="panel">
+<section
+  id="rutas"
+  class="panel"
+>
 
 <h2>Mapa operativo y rutas</h2>
 
@@ -278,33 +450,47 @@ Esta versión de prueba ubica clientes de forma simulada.
 La siguiente conexión usará coordenadas y mapas reales.
 </p>
 
-<div class="map" id="map"></div>
+<div
+  class="map"
+  id="map"
+></div>
 
 <h3>Pedidos pendientes</h3>
 
-<div id="routeList" class="card"></div>
+<div
+  id="routeList"
+  class="card"
+></div>
 
 </section>
 
 
-<section id="produccion" class="panel">
+<section
+  id="produccion"
+  class="panel"
+>
 
 <h2>Producción</h2>
 
 <div class="card">
 
 <input
-id="pqty"
-type="number"
-placeholder="Garrafones producidos">
+  id="pqty"
+  type="number"
+  placeholder="Garrafones producidos"
+>
 
 <input
-id="preject"
-type="number"
-value="0"
-placeholder="Rechazados">
+  id="preject"
+  type="number"
+  value="0"
+  placeholder="Rechazados"
+>
 
-<button class="btn" onclick="addProduction()">
+<button
+  class="btn"
+  onclick="addProduction()"
+>
 Registrar producción
 </button>
 
@@ -315,7 +501,10 @@ Registrar producción
 </section>
 
 
-<section id="inventario" class="panel">
+<section
+  id="inventario"
+  class="panel"
+>
 
 <h2>Inventario de garrafones</h2>
 
@@ -341,22 +530,33 @@ Registrar producción
 </section>
 
 
-<section id="reportes" class="panel">
+<section
+  id="reportes"
+  class="panel"
+>
 
 <h2>Reportes</h2>
 
 <div class="card">
 
-<button class="btn" onclick="exportCSV()">
+<button
+  class="btn"
+  onclick="exportCSV()"
+>
 Exportar ventas CSV
 </button>
 
-<button class="btn danger" onclick="resetDemo()">
+<button
+  class="btn danger"
+  onclick="resetDemo()"
+>
 Borrar datos de prueba
 </button>
 
 <p class="muted">
-Los datos de esta versión se guardan en este navegador mediante almacenamiento local.
+Las ventas y producción continúan temporalmente
+almacenadas en este navegador mientras completamos
+la migración a la base de datos.
 </p>
 
 </div>
@@ -365,17 +565,16 @@ Los datos de esta versión se guardan en este navegador mediante almacenamiento 
 
 </main>
 
+</div>
 
-<!-- LIBRERÍA OFICIAL DE SUPABASE -->
+
+<!-- =====================================================
+     SUPABASE
+     ===================================================== -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-
 <script>
-
-/* =========================================================
-   CONEXIÓN SUPABASE
-   ========================================================= */
 
 const SUPABASE_URL =
 'https://cxzmhuydzxevlztkjbwz.supabase.co';
@@ -390,14 +589,165 @@ window.supabase.createClient(
 );
 
 
-/* =========================================================
-   BASE LOCAL ACTUAL
-   Se mantiene mientras incorporamos autenticación
-   ========================================================= */
+/* =====================================================
+   AUTENTICACIÓN
+   ===================================================== */
 
-const KEY = 'adb_control_v1';
+async function login(){
 
-let db = JSON.parse(
+  const email =
+  document
+  .getElementById('loginEmail')
+  .value
+  .trim();
+
+  const password =
+  document
+  .getElementById('loginPassword')
+  .value;
+
+  const message =
+  document
+  .getElementById('loginMessage');
+
+
+  if(!email || !password){
+
+    message.textContent =
+    'Ingrese correo y contraseña.';
+
+    return;
+  }
+
+
+  message.textContent =
+  'Ingresando...';
+
+
+  const {data,error} =
+  await supabaseClient.auth.signInWithPassword({
+    email:email,
+    password:password
+  });
+
+
+  if(error){
+
+    console.error(error);
+
+    message.textContent =
+    'No fue posible ingresar. Verifique el correo y la contraseña.';
+
+    return;
+  }
+
+
+  message.textContent = '';
+
+  showApplication(
+    data.user
+  );
+
+}
+
+
+async function logout(){
+
+  await supabaseClient.auth.signOut();
+
+  document
+  .getElementById('app')
+  .style.display =
+  'none';
+
+  document
+  .getElementById('loginScreen')
+  .style.display =
+  'flex';
+
+  document
+  .getElementById('loginPassword')
+  .value =
+  '';
+
+}
+
+
+function showApplication(user){
+
+  document
+  .getElementById('loginScreen')
+  .style.display =
+  'none';
+
+  document
+  .getElementById('app')
+  .style.display =
+  'block';
+
+  document
+  .getElementById('currentUser')
+  .textContent =
+  user?.email || 'Usuario autorizado';
+
+  render();
+
+}
+
+
+async function checkSession(){
+
+  const {data} =
+  await supabaseClient.auth.getSession();
+
+  if(data.session){
+
+    showApplication(
+      data.session.user
+    );
+
+  }else{
+
+    document
+    .getElementById('loginScreen')
+    .style.display =
+    'flex';
+
+    document
+    .getElementById('app')
+    .style.display =
+    'none';
+
+  }
+
+}
+
+
+/* Permite iniciar sesión presionando Enter */
+
+document
+.getElementById('loginPassword')
+.addEventListener(
+  'keydown',
+  function(event){
+
+    if(event.key === 'Enter'){
+      login();
+    }
+
+  }
+);
+
+
+/* =====================================================
+   BASE LOCAL TEMPORAL
+   ===================================================== */
+
+const KEY =
+'adb_control_v1';
+
+let db =
+JSON.parse(
   localStorage.getItem(KEY) ||
   '{"clients":[],"sales":[],"production":[]}'
 );
@@ -411,12 +761,13 @@ const save = () => {
   );
 
   render();
+
 };
 
 
-/* =========================================================
+/* =====================================================
    UTILIDADES
-   ========================================================= */
+   ===================================================== */
 
 const money = n =>
 new Intl.NumberFormat(
@@ -442,20 +793,31 @@ function show(id){
   .classList.add('active');
 
   render();
+
 }
 
 
-/* =========================================================
-   CLIENTES
-   ========================================================= */
+/* =====================================================
+   CLIENTES - TEMPORALMENTE LOCAL
+   ===================================================== */
 
 function addClient(){
 
-  let n = cname.value.trim();
+  let n =
+  document
+  .getElementById('cname')
+  .value
+  .trim();
+
 
   if(!n){
-    return alert('Ingrese el nombre');
+
+    return alert(
+      'Ingrese el nombre'
+    );
+
   }
+
 
   db.clients.push({
 
@@ -463,45 +825,89 @@ function addClient(){
 
     name:n,
 
-    phone:cphone.value,
+    phone:
+    document
+    .getElementById('cphone')
+    .value,
 
-    address:caddress.value,
+    address:
+    document
+    .getElementById('caddress')
+    .value,
 
-    type:ctype.value,
+    type:
+    document
+    .getElementById('ctype')
+    .value,
 
-    created:new Date().toISOString()
+    created:
+    new Date().toISOString()
 
   });
 
-  cname.value = '';
-  cphone.value = '';
-  caddress.value = '';
+
+  document
+  .getElementById('cname')
+  .value = '';
+
+  document
+  .getElementById('cphone')
+  .value = '';
+
+  document
+  .getElementById('caddress')
+  .value = '';
+
 
   save();
+
 }
 
 
-/* =========================================================
+/* =====================================================
    VENTAS
-   ========================================================= */
+   ===================================================== */
 
 function addSale(){
 
-  if(!vclient.value){
+  const client =
+  document
+  .getElementById('vclient');
+
+
+  if(!client.value){
+
     return alert(
       'Primero registre un cliente'
     );
+
   }
 
-  let q = +vqty.value;
-  let p = +vprice.value;
-  let e = +vempties.value;
+
+  let q =
+  +document
+  .getElementById('vqty')
+  .value;
+
+
+  let p =
+  +document
+  .getElementById('vprice')
+  .value;
+
+
+  let e =
+  +document
+  .getElementById('vempties')
+  .value;
+
 
   db.sales.push({
 
     id:Date.now(),
 
-    clientId:+vclient.value,
+    clientId:
+    +client.value,
 
     qty:q,
 
@@ -509,30 +915,46 @@ function addSale(){
 
     total:q*p,
 
-    pay:vpay.value,
+    pay:
+    document
+    .getElementById('vpay')
+    .value,
 
     empties:e,
 
-    date:new Date().toISOString()
+    date:
+    new Date().toISOString()
 
   });
 
+
   save();
+
 }
 
 
-/* =========================================================
+/* =====================================================
    PRODUCCIÓN
-   ========================================================= */
+   ===================================================== */
 
 function addProduction(){
 
-  let q = +pqty.value;
-  let r = +preject.value;
+  let q =
+  +document
+  .getElementById('pqty')
+  .value;
+
+
+  let r =
+  +document
+  .getElementById('preject')
+  .value;
+
 
   if(!q){
     return;
   }
+
 
   db.production.push({
 
@@ -542,19 +964,25 @@ function addProduction(){
 
     reject:r,
 
-    date:new Date().toISOString()
+    date:
+    new Date().toISOString()
 
   });
 
-  pqty.value = '';
+
+  document
+  .getElementById('pqty')
+  .value = '';
+
 
   save();
+
 }
 
 
-/* =========================================================
-   FECHAS
-   ========================================================= */
+/* =====================================================
+   FECHA
+   ===================================================== */
 
 function today(s){
 
@@ -566,9 +994,9 @@ function today(s){
 }
 
 
-/* =========================================================
-   RENDER PRINCIPAL
-   ========================================================= */
+/* =====================================================
+   RENDER
+   ===================================================== */
 
 function render(){
 
@@ -576,6 +1004,7 @@ function render(){
   db.sales.filter(
     x => today(x.date)
   );
+
 
   let tp =
   db.production.filter(
@@ -615,24 +1044,39 @@ function render(){
   );
 
 
-  kUnits.textContent =
+  document
+  .getElementById('kUnits')
+  .textContent =
   units + ' / 500';
 
 
-  kSales.textContent =
+  document
+  .getElementById('kSales')
+  .textContent =
   money(sales);
 
 
-  kClients.textContent =
+  document
+  .getElementById('kClients')
+  .textContent =
   db.clients.length;
 
 
-  kProd.textContent =
+  document
+  .getElementById('kProd')
+  .textContent =
   prod;
 
 
-  kDebt.textContent =
+  document
+  .getElementById('kDebt')
+  .textContent =
   money(debt);
+
+
+  const activity =
+  document
+  .getElementById('activity');
 
 
   activity.innerHTML =
@@ -646,14 +1090,12 @@ function render(){
   .map(
     s =>
     `<div>
-      <span class="tag">
-      ${s.pay}
-      </span>
-      ${clientName(s.clientId)}
-      —
-      ${s.qty} garrafón(es)
-      —
-      <b>${money(s.total)}</b>
+    <span class="tag">${s.pay}</span>
+    ${clientName(s.clientId)}
+    —
+    ${s.qty} garrafón(es)
+    —
+    <b>${money(s.total)}</b>
     </div>`
   )
   .join('')
@@ -661,6 +1103,11 @@ function render(){
   :
 
   'Aún no hay movimientos.';
+
+
+  const vclient =
+  document
+  .getElementById('vclient');
 
 
   vclient.innerHTML =
@@ -673,13 +1120,15 @@ function render(){
   .map(
     c =>
     `<option value="${c.id}">
-      ${c.name}
+    ${c.name}
     </option>`
   )
   .join('');
 
 
-  clientsTable.innerHTML =
+  document
+  .getElementById('clientsTable')
+  .innerHTML =
 
   table(
 
@@ -702,7 +1151,9 @@ function render(){
   );
 
 
-  salesTable.innerHTML =
+  document
+  .getElementById('salesTable')
+  .innerHTML =
 
   table(
 
@@ -720,22 +1171,14 @@ function render(){
     .map(
       s => [
 
-        new Date(
-          s.date
-        )
-        .toLocaleString(
-          'es-CO'
-        ),
+        new Date(s.date)
+        .toLocaleString('es-CO'),
 
-        clientName(
-          s.clientId
-        ),
+        clientName(s.clientId),
 
         s.qty,
 
-        money(
-          s.total
-        ),
+        money(s.total),
 
         s.pay
 
@@ -745,7 +1188,9 @@ function render(){
   );
 
 
-  prodTable.innerHTML =
+  document
+  .getElementById('prodTable')
+  .innerHTML =
 
   table(
 
@@ -761,12 +1206,8 @@ function render(){
     .map(
       p => [
 
-        new Date(
-          p.date
-        )
-        .toLocaleString(
-          'es-CO'
-        ),
+        new Date(p.date)
+        .toLocaleString('es-CO'),
 
         p.qty,
 
@@ -799,41 +1240,49 @@ function render(){
   );
 
 
-  iFull.textContent =
+  document
+  .getElementById('iFull')
+  .textContent =
   Math.max(
     0,
     allProd-allSold
   );
 
 
-  iSold.textContent =
+  document
+  .getElementById('iSold')
+  .textContent =
   allSold;
 
 
-  iEmpty.textContent =
+  document
+  .getElementById('iEmpty')
+  .textContent =
   empt;
 
 
-  map.innerHTML =
+  document
+  .getElementById('map')
+  .innerHTML =
 
   db.clients
   .map(
     (c,i) =>
-
     `<div
-      class="pin"
-      style="
-      left:${8+(i*17)%78}%;
-      top:${15+(i*23)%70}%
-      ">
-      📍 ${c.name}
+    class="pin"
+    style="
+    left:${8+(i*17)%78}%;
+    top:${15+(i*23)%70}%
+    ">
+    📍 ${c.name}
     </div>`
-
   )
   .join('');
 
 
-  routeList.innerHTML =
+  document
+  .getElementById('routeList')
+  .innerHTML =
 
   db.clients.length
 
@@ -843,8 +1292,8 @@ function render(){
   .map(
     (c,i) =>
     `Ruta ${1+(i%3)}
-     • ${c.name}
-     • ${c.address || 'Sin dirección'}`
+    • ${c.name}
+    • ${c.address || 'Sin dirección'}`
   )
   .join('<br>')
 
@@ -855,9 +1304,9 @@ function render(){
 }
 
 
-/* =========================================================
-   FUNCIONES AUXILIARES
-   ========================================================= */
+/* =====================================================
+   AUXILIARES
+   ===================================================== */
 
 function clientName(id){
 
@@ -875,54 +1324,42 @@ function clientName(id){
 function table(h,rows){
 
   return `
-
   <table>
 
   <thead>
-
   <tr>
-
   ${
     h.map(
       x => `<th>${x}</th>`
-    )
-    .join('')
+    ).join('')
   }
-
   </tr>
-
   </thead>
 
   <tbody>
-
   ${
     rows.map(
       r =>
       `<tr>
       ${
         r.map(
-          x =>
-          `<td>${x ?? ''}</td>`
-        )
-        .join('')
+          x => `<td>${x ?? ''}</td>`
+        ).join('')
       }
       </tr>`
-    )
-    .join('')
+    ).join('')
   }
-
   </tbody>
 
   </table>
-
   `;
 
 }
 
 
-/* =========================================================
+/* =====================================================
    EXPORTAR CSV
-   ========================================================= */
+   ===================================================== */
 
 function exportCSV(){
 
@@ -978,21 +1415,18 @@ function exportCSV(){
 
 
   let u =
-  URL.createObjectURL(
-    blob
-  );
+  URL.createObjectURL(blob);
 
 
   let x =
-  document.createElement(
-    'a'
-  );
+  document.createElement('a');
 
 
   x.href = u;
 
   x.download =
   'ventas_agua_del_bosque.csv';
+
 
   x.click();
 
@@ -1002,9 +1436,9 @@ function exportCSV(){
 }
 
 
-/* =========================================================
-   BORRAR DATOS DE PRUEBA
-   ========================================================= */
+/* =====================================================
+   BORRAR PRUEBAS
+   ===================================================== */
 
 function resetDemo(){
 
@@ -1029,11 +1463,26 @@ function resetDemo(){
 }
 
 
-/* =========================================================
-   INICIO DEL SISTEMA
-   ========================================================= */
+/* =====================================================
+   INICIO
+   ===================================================== */
 
-render();
+checkSession();
+
+
+supabaseClient.auth.onAuthStateChange(
+  (event,session) => {
+
+    if(session){
+
+      showApplication(
+        session.user
+      );
+
+    }
+
+  }
+);
 
 
 if(
