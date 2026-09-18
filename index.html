@@ -4,208 +4,735 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Agua del Bosque Control 4.0</title>
-<link rel="manifest" href="manifest.json">
 
 <style>
-body{font-family:Arial,sans-serif;margin:0;background:#f4f8f8;color:#123}
-.top{background:linear-gradient(120deg,#063b5c,#07845f);color:white;padding:18px}
-.wrap{max-width:1180px;margin:auto;padding:18px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
-.card{background:white;padding:16px;border-radius:16px;box-shadow:0 4px 18px #0001}
-.big{font-size:30px;font-weight:800}
-.nav button,.btn{border:0;border-radius:10px;padding:10px 13px;margin:4px;background:#087b5c;color:white;cursor:pointer}
-.nav button{background:#ffffff22}
-.btn:disabled{opacity:.6;cursor:not-allowed}
-.panel{display:none}
-.panel.active{display:block}
-input,select{padding:10px;border:1px solid #ccd;border-radius:8px;margin:5px;width:min(260px,90%);box-sizing:border-box}
-table{width:100%;border-collapse:collapse;background:white}
-th,td{padding:10px;border-bottom:1px solid #eee;text-align:left}
-.map{height:330px;border-radius:16px;background:linear-gradient(#dff3e8,#cfe6ef);position:relative;overflow:hidden}
-.pin{position:absolute;background:#087b5c;color:white;padding:7px;border-radius:12px;font-size:12px}
-.muted{color:#678}
-.danger{background:#b94141}
-.tag{display:inline-block;background:#e5f5ef;color:#087b5c;padding:5px 8px;border-radius:20px;font-size:12px}
+*{box-sizing:border-box}
+:root{
+ --green:#087b5c;
+ --green2:#0aa174;
+ --blue:#063b5c;
+ --bg:#f3f7f6;
+ --text:#17343c;
+ --muted:#6b7d82;
+ --white:#fff;
+ --border:#e3ece9;
+ --danger:#c94b4b;
+ --shadow:0 5px 20px rgba(20,50,55,.08)
+}
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:var(--bg);
+ color:var(--text)
+}
+button,input,select{font:inherit}
+button{cursor:pointer}
 
+/* LOGIN */
 #loginScreen{
  min-height:100vh;
  display:flex;
  align-items:center;
  justify-content:center;
  padding:20px;
- box-sizing:border-box;
  background-image:
  linear-gradient(rgba(2,32,46,.20),rgba(2,45,40,.25)),
  url('ChatGPT%20Image%2018%20sept%202026%2C%2014_37_26.png');
  background-size:cover;
  background-position:center;
- background-repeat:no-repeat;
- background-attachment:fixed
+ background-repeat:no-repeat
 }
-
 .loginCard{
- background:rgba(255,255,255,.91);
+ background:rgba(255,255,255,.92);
  width:min(390px,100%);
  padding:30px;
- border-radius:22px;
+ border-radius:24px;
  box-shadow:0 18px 50px rgba(0,0,0,.28);
  text-align:center;
- backdrop-filter:blur(5px);
- -webkit-backdrop-filter:blur(5px);
- border:1px solid rgba(255,255,255,.65)
+ backdrop-filter:blur(6px)
+}
+.loginCard h1{margin:0;color:var(--blue)}
+.loginCard p{color:var(--muted)}
+.loginCard input{
+ width:100%;
+ padding:13px;
+ margin:7px 0;
+ border:1px solid #ccd9d6;
+ border-radius:11px;
+ background:#fff
+}
+.loginBtn{
+ width:100%;
+ border:0;
+ padding:13px;
+ margin-top:8px;
+ border-radius:11px;
+ background:var(--green);
+ color:#fff;
+ font-weight:bold
+}
+#loginMessage{margin-top:12px;color:#667}
+
+/* APP */
+#app{display:none}
+.appLayout{
+ min-height:100vh;
+ display:flex
 }
 
-.loginCard h1{margin-bottom:5px;color:#063b5c}
-.loginCard input{width:100%;max-width:none;margin:7px 0;background:rgba(255,255,255,.94)}
-.loginCard .btn{width:100%;margin:10px 0 0;padding:12px;font-weight:bold}
-#loginMessage{margin-top:12px;font-size:14px}
-#app{display:none}
-.userbar{font-size:13px;margin-top:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.logout{background:#ffffff22;border:1px solid #ffffff55;color:white;padding:6px 10px;border-radius:8px;cursor:pointer}
+/* SIDEBAR */
+.sidebar{
+ width:245px;
+ background:linear-gradient(180deg,#063b5c,#07594f);
+ color:#fff;
+ padding:22px 14px;
+ position:fixed;
+ top:0;
+ left:0;
+ bottom:0;
+ overflow-y:auto;
+ z-index:20
+}
+.brand{
+ padding:4px 10px 22px;
+ border-bottom:1px solid rgba(255,255,255,.14);
+ margin-bottom:16px
+}
+.brandTitle{
+ font-size:20px;
+ font-weight:800
+}
+.brandSub{
+ font-size:12px;
+ opacity:.72;
+ margin-top:5px
+}
+.menuBtn{
+ width:100%;
+ border:0;
+ color:#eaf7f3;
+ background:transparent;
+ text-align:left;
+ padding:12px 13px;
+ margin:3px 0;
+ border-radius:11px;
+ font-weight:600;
+ transition:.2s
+}
+.menuBtn:hover,
+.menuBtn.active{
+ background:rgba(255,255,255,.15);
+ color:#fff
+}
+.menuIcon{
+ display:inline-block;
+ width:28px;
+ font-size:17px
+}
+.sidebarBottom{
+ margin-top:25px;
+ padding-top:15px;
+ border-top:1px solid rgba(255,255,255,.14)
+}
+.userSmall{
+ font-size:11px;
+ opacity:.75;
+ padding:7px 10px;
+ overflow-wrap:anywhere
+}
+.logoutBtn{
+ width:100%;
+ padding:10px;
+ border-radius:10px;
+ border:1px solid rgba(255,255,255,.25);
+ background:rgba(255,255,255,.08);
+ color:#fff
+}
 
-@media(max-width:600px){
- #loginScreen{background-attachment:scroll;background-position:center}
- .loginCard{padding:24px 20px}
+/* MAIN */
+.mainArea{
+ margin-left:245px;
+ width:calc(100% - 245px);
+ min-height:100vh
+}
+.topbar{
+ height:74px;
+ background:#fff;
+ border-bottom:1px solid var(--border);
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ padding:0 28px;
+ position:sticky;
+ top:0;
+ z-index:10
+}
+.welcome{
+ font-size:20px;
+ font-weight:800
+}
+.dateText{
+ color:var(--muted);
+ font-size:13px;
+ margin-top:4px
+}
+.mobileMenu{
+ display:none;
+ border:0;
+ background:#edf6f3;
+ border-radius:9px;
+ padding:9px 12px;
+ font-size:20px
+}
+.content{
+ padding:26px;
+ max-width:1400px;
+ margin:auto
+}
+.panel{display:none}
+.panel.active{display:block}
+.sectionTitle{
+ font-size:25px;
+ margin:0 0 5px
+}
+.sectionSub{
+ color:var(--muted);
+ margin:0 0 22px
+}
+
+/* DASHBOARD */
+.statsGrid{
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:16px
+}
+.statCard{
+ background:#fff;
+ border:1px solid var(--border);
+ border-radius:17px;
+ padding:18px;
+ box-shadow:var(--shadow)
+}
+.statTop{
+ display:flex;
+ align-items:center;
+ justify-content:space-between
+}
+.statIcon{
+ width:42px;
+ height:42px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ background:#edf7f3;
+ border-radius:12px;
+ font-size:21px
+}
+.statLabel{
+ color:var(--muted);
+ font-size:13px
+}
+.statValue{
+ font-size:27px;
+ font-weight:800;
+ margin-top:9px
+}
+.dashboardGrid{
+ display:grid;
+ grid-template-columns:1.5fr 1fr;
+ gap:17px;
+ margin-top:17px
+}
+.card{
+ background:#fff;
+ border:1px solid var(--border);
+ border-radius:17px;
+ padding:20px;
+ box-shadow:var(--shadow)
+}
+.cardTitle{
+ font-size:17px;
+ font-weight:800;
+ margin-bottom:15px
+}
+.progressOuter{
+ height:15px;
+ background:#e8efed;
+ border-radius:20px;
+ overflow:hidden
+}
+.progressInner{
+ height:100%;
+ width:0%;
+ background:linear-gradient(90deg,var(--green),var(--green2));
+ border-radius:20px;
+ transition:width .4s
+}
+.goalNumbers{
+ display:flex;
+ justify-content:space-between;
+ margin-top:10px;
+ font-size:13px;
+ color:var(--muted)
+}
+.quickGrid{
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:10px
+}
+.quickBtn{
+ border:1px solid var(--border);
+ background:#f8fbfa;
+ padding:14px 10px;
+ border-radius:13px;
+ color:var(--text);
+ font-weight:700
+}
+.quickBtn:hover{background:#edf7f3}
+
+/* FORMS */
+.formCard{
+ background:#fff;
+ border:1px solid var(--border);
+ border-radius:17px;
+ padding:18px;
+ box-shadow:var(--shadow);
+ margin-bottom:18px
+}
+.formGrid{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+ gap:10px
+}
+input,select{
+ width:100%;
+ padding:11px;
+ border:1px solid #d4dfdc;
+ border-radius:10px;
+ background:#fff
+}
+.primaryBtn{
+ border:0;
+ border-radius:10px;
+ padding:11px 16px;
+ background:var(--green);
+ color:#fff;
+ font-weight:700
+}
+.primaryBtn:disabled{opacity:.6}
+.dangerBtn{
+ border:0;
+ border-radius:10px;
+ padding:11px 16px;
+ background:var(--danger);
+ color:#fff
+}
+
+/* TABLE */
+.tableWrap{
+ overflow-x:auto;
+ background:#fff;
+ border:1px solid var(--border);
+ border-radius:17px;
+ box-shadow:var(--shadow)
+}
+table{
+ width:100%;
+ border-collapse:collapse;
+ min-width:650px
+}
+th{
+ background:#f7faf9;
+ color:#536a6e;
+ font-size:12px;
+ text-transform:uppercase
+}
+th,td{
+ padding:13px 15px;
+ border-bottom:1px solid #edf1f0;
+ text-align:left
+}
+td{font-size:14px}
+.badge{
+ display:inline-block;
+ padding:5px 9px;
+ border-radius:20px;
+ background:#e7f6f0;
+ color:var(--green);
+ font-size:12px;
+ font-weight:bold
+}
+
+/* MAP PLACEHOLDER */
+.map{
+ height:320px;
+ border-radius:17px;
+ background:linear-gradient(#dff3e8,#cfe6ef);
+ position:relative;
+ overflow:hidden;
+ border:1px solid var(--border)
+}
+.pin{
+ position:absolute;
+ background:var(--green);
+ color:#fff;
+ padding:7px 9px;
+ border-radius:12px;
+ font-size:12px
+}
+
+/* EMPTY MODULES */
+.moduleComing{
+ text-align:center;
+ padding:45px 20px
+}
+.moduleIcon{font-size:50px}
+.moduleComing h3{margin-bottom:7px}
+.moduleComing p{color:var(--muted)}
+
+/* MOBILE */
+@media(max-width:1000px){
+ .statsGrid{grid-template-columns:repeat(2,1fr)}
+ .dashboardGrid{grid-template-columns:1fr}
+}
+@media(max-width:760px){
+ .sidebar{
+  transform:translateX(-100%);
+  transition:.25s;
+  width:250px
+ }
+ .sidebar.open{transform:translateX(0)}
+ .mainArea{
+  margin-left:0;
+  width:100%
+ }
+ .mobileMenu{display:block}
+ .topbar{padding:0 15px}
+ .content{padding:17px}
+ .statsGrid{grid-template-columns:1fr 1fr}
+ .welcome{font-size:17px}
+}
+@media(max-width:430px){
+ .statsGrid{grid-template-columns:1fr}
 }
 </style>
 </head>
 
 <body>
 
+<!-- LOGIN -->
 <div id="loginScreen">
  <div class="loginCard">
   <h1>Agua del Bosque</h1>
-  <p class="muted">Control 4.0</p>
-  <h3>Inicio de sesión</h3>
-  <input id="loginEmail" type="email" placeholder="Correo electrónico" autocomplete="username">
-  <input id="loginPassword" type="password" placeholder="Contraseña" autocomplete="current-password">
-  <button class="btn" onclick="login()">Ingresar</button>
-  <div id="loginMessage" class="muted"></div>
+  <p>Control 4.0</p>
+  <h3>Acceso autorizado</h3>
+  <input id="loginEmail" type="email" placeholder="Correo electrónico">
+  <input id="loginPassword" type="password" placeholder="Contraseña">
+  <button class="loginBtn" onclick="login()">Ingresar</button>
+  <div id="loginMessage"></div>
  </div>
 </div>
 
+<!-- APP -->
 <div id="app">
+<div class="appLayout">
 
-<div class="top">
- <div class="wrap">
-  <b>AGUA DEL BOSQUE CONTROL 4.0</b>
-  <div class="userbar">
-   <span id="currentUser"></span>
-   <button class="logout" onclick="logout()">Cerrar sesión</button>
-  </div>
-  <div class="nav">
-   <button onclick="show('inicio')">Inicio</button>
-   <button onclick="show('clientes')">Clientes</button>
-   <button onclick="show('ventas')">Ventas</button>
-   <button onclick="show('rutas')">Mapa/Rutas</button>
-   <button onclick="show('produccion')">Producción</button>
-   <button onclick="show('inventario')">Inventario</button>
-   <button onclick="show('reportes')">Reportes</button>
+<aside class="sidebar" id="sidebar">
+
+ <div class="brand">
+  <div class="brandTitle">💧 Agua del Bosque</div>
+  <div class="brandSub">CONTROL EMPRESARIAL 4.0</div>
+ </div>
+
+ <button class="menuBtn active" data-panel="inicio" onclick="show('inicio',this)">
+  <span class="menuIcon">🏠</span> Inicio
+ </button>
+
+ <button class="menuBtn" data-panel="clientes" onclick="show('clientes',this)">
+  <span class="menuIcon">👥</span> Clientes
+ </button>
+
+ <button class="menuBtn" data-panel="ventas" onclick="show('ventas',this)">
+  <span class="menuIcon">🛒</span> Ventas
+ </button>
+
+ <button class="menuBtn" data-panel="pedidos" onclick="show('pedidos',this)">
+  <span class="menuIcon">📋</span> Pedidos
+ </button>
+
+ <button class="menuBtn" data-panel="rutas" onclick="show('rutas',this)">
+  <span class="menuIcon">🗺️</span> Rutas
+ </button>
+
+ <button class="menuBtn" data-panel="produccion" onclick="show('produccion',this)">
+  <span class="menuIcon">🏭</span> Producción
+ </button>
+
+ <button class="menuBtn" data-panel="inventario" onclick="show('inventario',this)">
+  <span class="menuIcon">♻️</span> Garrafones
+ </button>
+
+ <button class="menuBtn" data-panel="cartera" onclick="show('cartera',this)">
+  <span class="menuIcon">💰</span> Cartera
+ </button>
+
+ <button class="menuBtn" data-panel="fidelizacion" onclick="show('fidelizacion',this)">
+  <span class="menuIcon">🎁</span> Fidelización
+ </button>
+
+ <button class="menuBtn" data-panel="reportes" onclick="show('reportes',this)">
+  <span class="menuIcon">📊</span> Reportes
+ </button>
+
+ <div class="sidebarBottom">
+  <div class="userSmall" id="currentUser"></div>
+  <button class="logoutBtn" onclick="logout()">Cerrar sesión</button>
+ </div>
+
+</aside>
+
+<div class="mainArea">
+
+<header class="topbar">
+ <div style="display:flex;align-items:center;gap:12px">
+  <button class="mobileMenu" onclick="toggleMenu()">☰</button>
+  <div>
+   <div class="welcome" id="welcomeText">Bienvenido a Agua del Bosque</div>
+   <div class="dateText" id="dateText"></div>
   </div>
  </div>
-</div>
+ <div>💧</div>
+</header>
 
-<main class="wrap">
+<main class="content">
 
+<!-- INICIO -->
 <section id="inicio" class="panel active">
- <h2>Tablero de control</h2>
- <div class="grid">
-  <div class="card"><span class="muted">Garrafones hoy</span><div class="big" id="kUnits">0 / 500</div></div>
-  <div class="card"><span class="muted">Ventas hoy</span><div class="big" id="kSales">$0</div></div>
-  <div class="card"><span class="muted">Clientes</span><div class="big" id="kClients">0</div></div>
-  <div class="card"><span class="muted">Producción hoy</span><div class="big" id="kProd">0</div></div>
-  <div class="card"><span class="muted">Cartera</span><div class="big" id="kDebt">$0</div></div>
+
+ <h1 class="sectionTitle">Resumen del día</h1>
+ <p class="sectionSub">Control general de la operación de Agua del Bosque.</p>
+
+ <div class="statsGrid">
+
+  <div class="statCard">
+   <div class="statTop">
+    <span class="statLabel">Garrafones vendidos</span>
+    <span class="statIcon">💧</span>
+   </div>
+   <div class="statValue" id="kUnits">0</div>
+   <div class="statLabel">Meta diaria: 500</div>
+  </div>
+
+  <div class="statCard">
+   <div class="statTop">
+    <span class="statLabel">Ventas de hoy</span>
+    <span class="statIcon">💵</span>
+   </div>
+   <div class="statValue" id="kSales">$0</div>
+   <div class="statLabel">Ingresos registrados</div>
+  </div>
+
+  <div class="statCard">
+   <div class="statTop">
+    <span class="statLabel">Clientes</span>
+    <span class="statIcon">👥</span>
+   </div>
+   <div class="statValue" id="kClients">0</div>
+   <div class="statLabel">Registrados en la nube</div>
+  </div>
+
+  <div class="statCard">
+   <div class="statTop">
+    <span class="statLabel">Cartera hoy</span>
+    <span class="statIcon">💳</span>
+   </div>
+   <div class="statValue" id="kDebt">$0</div>
+   <div class="statLabel">Ventas a crédito</div>
+  </div>
+
  </div>
- <h3>Actividad reciente</h3>
- <div class="card" id="activity">Aún no hay movimientos.</div>
+
+ <div class="dashboardGrid">
+
+  <div class="card">
+   <div class="cardTitle">🎯 Meta diaria de ventas</div>
+   <div class="progressOuter">
+    <div class="progressInner" id="goalProgress"></div>
+   </div>
+   <div class="goalNumbers">
+    <span id="goalText">0 de 500 garrafones</span>
+    <span id="goalPercent">0%</span>
+   </div>
+
+   <div class="cardTitle" style="margin-top:25px">Actividad reciente</div>
+   <div id="activity">Aún no hay movimientos hoy.</div>
+  </div>
+
+  <div class="card">
+   <div class="cardTitle">⚡ Accesos rápidos</div>
+   <div class="quickGrid">
+    <button class="quickBtn" onclick="openPanel('ventas')">🛒<br>Nueva venta</button>
+    <button class="quickBtn" onclick="openPanel('clientes')">👤<br>Nuevo cliente</button>
+    <button class="quickBtn" onclick="openPanel('produccion')">🏭<br>Producción</button>
+    <button class="quickBtn" onclick="openPanel('rutas')">🗺️<br>Ver rutas</button>
+   </div>
+  </div>
+
+ </div>
 </section>
 
+<!-- CLIENTES -->
 <section id="clientes" class="panel">
- <h2>Clientes</h2>
- <div class="card">
-  <input id="cname" placeholder="Nombre / negocio">
-  <input id="cphone" placeholder="Celular">
-  <input id="caddress" placeholder="Dirección / sector">
-  <select id="ctype">
-   <option>Hogar</option>
-   <option>Conjunto</option>
-   <option>Empresa</option>
-   <option>Tienda</option>
-   <option>Restaurante</option>
-   <option>Gimnasio</option>
-   <option>Distribuidor</option>
-  </select>
-  <button id="saveClientBtn" class="btn" onclick="addClient()">Guardar cliente</button>
+ <h1 class="sectionTitle">Clientes</h1>
+ <p class="sectionSub">Registro y consulta de clientes.</p>
+
+ <div class="formCard">
+  <div class="cardTitle">➕ Nuevo cliente</div>
+  <div class="formGrid">
+   <input id="cname" placeholder="Nombre / negocio">
+   <input id="cphone" placeholder="Celular">
+   <input id="caddress" placeholder="Dirección / sector">
+   <select id="ctype">
+    <option>Hogar</option>
+    <option>Conjunto</option>
+    <option>Empresa</option>
+    <option>Tienda</option>
+    <option>Restaurante</option>
+    <option>Gimnasio</option>
+    <option>Distribuidor</option>
+   </select>
+  </div>
+  <button id="saveClientBtn" class="primaryBtn" style="margin-top:12px" onclick="addClient()">Guardar cliente</button>
  </div>
- <div id="clientsTable"></div>
+
+ <div class="tableWrap" id="clientsTable"></div>
 </section>
 
+<!-- VENTAS -->
 <section id="ventas" class="panel">
- <h2>Registrar venta</h2>
- <div class="card">
-  <select id="vclient"></select>
-  <input id="vqty" type="number" min="1" value="1" placeholder="Cantidad">
-  <input id="vprice" type="number" min="0" value="7000" placeholder="Precio unitario">
-  <select id="vpay">
-   <option>Efectivo</option>
-   <option>Transferencia</option>
-   <option>Crédito</option>
-  </select>
-  <input id="vempties" type="number" min="0" value="0" placeholder="Envases recuperados">
-  <input id="vnotes" type="text" placeholder="Observaciones (opcional)">
-  <button id="saveSaleBtn" class="btn" onclick="addSale()">Registrar venta</button>
+ <h1 class="sectionTitle">Ventas</h1>
+ <p class="sectionSub">Las ventas se almacenan directamente en Supabase.</p>
+
+ <div class="formCard">
+  <div class="cardTitle">🛒 Registrar nueva venta</div>
+  <div class="formGrid">
+   <select id="vclient"></select>
+   <input id="vqty" type="number" min="1" value="1" placeholder="Cantidad">
+   <input id="vprice" type="number" min="1" value="7000" placeholder="Precio unitario">
+   <select id="vpay">
+    <option>Efectivo</option>
+    <option>Transferencia</option>
+    <option>Crédito</option>
+   </select>
+   <input id="vempties" type="number" min="0" value="0" placeholder="Envases recuperados">
+   <input id="vnotes" placeholder="Observaciones">
+  </div>
+  <button id="saveSaleBtn" class="primaryBtn" style="margin-top:12px" onclick="addSale()">Registrar venta</button>
  </div>
- <p class="muted">Las ventas de esta sección se guardan en Supabase.</p>
- <div id="salesTable"></div>
+
+ <div class="tableWrap" id="salesTable"></div>
 </section>
 
+<!-- PEDIDOS -->
+<section id="pedidos" class="panel">
+ <h1 class="sectionTitle">Pedidos</h1>
+ <p class="sectionSub">Próximo módulo operativo.</p>
+ <div class="card moduleComing">
+  <div class="moduleIcon">📋</div>
+  <h3>Gestión de pedidos</h3>
+  <p>Aquí controlaremos pedidos pendientes, en ruta y entregados.</p>
+ </div>
+</section>
+
+<!-- RUTAS -->
 <section id="rutas" class="panel">
- <h2>Mapa operativo y rutas</h2>
- <p class="muted">Esta versión ubica clientes de forma simulada. Más adelante conectaremos coordenadas y mapas reales.</p>
+ <h1 class="sectionTitle">Rutas</h1>
+ <p class="sectionSub">Visualización inicial de clientes y zonas de entrega.</p>
  <div class="map" id="map"></div>
- <h3>Pedidos pendientes</h3>
- <div id="routeList" class="card"></div>
+ <div class="card" style="margin-top:17px">
+  <div class="cardTitle">Clientes por ruta</div>
+  <div id="routeList"></div>
+ </div>
 </section>
 
+<!-- PRODUCCION -->
 <section id="produccion" class="panel">
- <h2>Producción</h2>
- <div class="card">
-  <input id="pqty" type="number" placeholder="Garrafones producidos">
-  <input id="preject" type="number" value="0" placeholder="Rechazados">
-  <button class="btn" onclick="addProduction()">Registrar producción</button>
+ <h1 class="sectionTitle">Producción</h1>
+ <p class="sectionSub">Temporalmente este módulo continúa guardándose en el navegador.</p>
+
+ <div class="formCard">
+  <div class="formGrid">
+   <input id="pqty" type="number" placeholder="Garrafones producidos">
+   <input id="preject" type="number" value="0" placeholder="Rechazados">
+  </div>
+  <button class="primaryBtn" style="margin-top:12px" onclick="addProduction()">Registrar producción</button>
  </div>
- <p class="muted">Producción permanece temporalmente almacenada en este navegador.</p>
- <div id="prodTable"></div>
+
+ <div class="tableWrap" id="prodTable"></div>
 </section>
 
+<!-- GARRAFONES -->
 <section id="inventario" class="panel">
- <h2>Inventario de garrafones</h2>
- <div class="grid">
-  <div class="card"><span class="muted">Llenos estimados</span><div class="big" id="iFull">0</div></div>
-  <div class="card"><span class="muted">Vendidos acumulados</span><div class="big" id="iSold">0</div></div>
-  <div class="card"><span class="muted">Envases recuperados</span><div class="big" id="iEmpty">0</div></div>
+ <h1 class="sectionTitle">Control de garrafones</h1>
+ <p class="sectionSub">Resumen inicial de envases.</p>
+
+ <div class="statsGrid">
+  <div class="statCard">
+   <div class="statLabel">Llenos estimados</div>
+   <div class="statValue" id="iFull">0</div>
+  </div>
+  <div class="statCard">
+   <div class="statLabel">Vendidos</div>
+   <div class="statValue" id="iSold">0</div>
+  </div>
+  <div class="statCard">
+   <div class="statLabel">Recuperados</div>
+   <div class="statValue" id="iEmpty">0</div>
+  </div>
  </div>
 </section>
 
+<!-- CARTERA -->
+<section id="cartera" class="panel">
+ <h1 class="sectionTitle">Cartera</h1>
+ <p class="sectionSub">Control inicial de ventas realizadas a crédito.</p>
+
+ <div class="statCard" style="max-width:350px">
+  <div class="statLabel">Crédito registrado hoy</div>
+  <div class="statValue" id="debtTotal">$0</div>
+ </div>
+</section>
+
+<!-- FIDELIZACION -->
+<section id="fidelizacion" class="panel">
+ <h1 class="sectionTitle">Fidelización</h1>
+ <p class="sectionSub">Programa comercial Agua del Bosque.</p>
+ <div class="card moduleComing">
+  <div class="moduleIcon">🎁</div>
+  <h3>Programa de fidelización</h3>
+  <p>Este módulo permitirá administrar participantes, números asignados y premios.</p>
+ </div>
+</section>
+
+<!-- REPORTES -->
 <section id="reportes" class="panel">
- <h2>Reportes</h2>
+ <h1 class="sectionTitle">Reportes</h1>
+ <p class="sectionSub">Consulta y exportación de información.</p>
+
  <div class="card">
-  <button class="btn" onclick="exportCSV()">Exportar ventas CSV</button>
-  <button class="btn danger" onclick="resetDemo()">Borrar producción local de prueba</button>
-  <p class="muted">
-   Clientes y ventas se almacenan en Supabase.
-   Producción permanece temporalmente en este navegador.
-  </p>
+  <button class="primaryBtn" onclick="exportCSV()">📥 Exportar ventas CSV</button>
+  <button class="dangerBtn" onclick="resetDemo()">Borrar producción local de prueba</button>
  </div>
 </section>
 
 </main>
 </div>
+</div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-
 const SUPABASE_URL='https://cxzmhuydzxevlztkjbwz.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY='sb_publishable_phdZAar5r0HiPxMYX_YWng_pu9kl0k3';
 
@@ -217,8 +744,7 @@ const supabaseClient=window.supabase.createClient(
 const KEY='adb_control_v2';
 
 let localDb=JSON.parse(
- localStorage.getItem(KEY) ||
- '{"production":[]}'
+ localStorage.getItem(KEY) || '{"production":[]}'
 );
 
 if(!Array.isArray(localDb.production)){
@@ -228,17 +754,35 @@ if(!Array.isArray(localDb.production)){
 let clients=[];
 let sales=[];
 
-const money=n=>new Intl.NumberFormat(
- 'es-CO',
- {
-  style:'currency',
-  currency:'COP',
-  maximumFractionDigits:0
- }
-).format(Number(n)||0);
+const money=n=>new Intl.NumberFormat('es-CO',{
+ style:'currency',
+ currency:'COP',
+ maximumFractionDigits:0
+}).format(Number(n)||0);
 
 function today(s){
  return new Date(s).toDateString()===new Date().toDateString();
+}
+
+function setDate(){
+ const now=new Date();
+
+ document.getElementById('dateText').textContent=
+ now.toLocaleDateString('es-CO',{
+  weekday:'long',
+  day:'numeric',
+  month:'long',
+  year:'numeric'
+ });
+
+ const hour=now.getHours();
+ let greeting='Buenos días';
+
+ if(hour>=12 && hour<18) greeting='Buenas tardes';
+ if(hour>=18) greeting='Buenas noches';
+
+ document.getElementById('welcomeText').textContent=
+ greeting+', bienvenido a Agua del Bosque';
 }
 
 function saveLocal(){
@@ -266,7 +810,7 @@ async function login(){
 
  if(error){
   console.error(error);
-  message.textContent='No fue posible ingresar. Verifique el correo y la contraseña.';
+  message.textContent='No fue posible ingresar. Verifique sus datos.';
   return;
  }
 
@@ -275,6 +819,7 @@ async function login(){
 }
 
 async function logout(){
+
  await supabaseClient.auth.signOut();
 
  document.getElementById('app').style.display='none';
@@ -287,6 +832,8 @@ async function showApplication(user){
  document.getElementById('loginScreen').style.display='none';
  document.getElementById('app').style.display='block';
  document.getElementById('currentUser').textContent=user?.email || 'Usuario autorizado';
+
+ setDate();
 
  await loadClients();
  await loadSales();
@@ -306,14 +853,9 @@ async function checkSession(){
  }
 }
 
-document.getElementById('loginPassword').addEventListener(
- 'keydown',
- function(event){
-  if(event.key==='Enter'){
-   login();
-  }
- }
-);
+document.getElementById('loginPassword').addEventListener('keydown',e=>{
+ if(e.key==='Enter') login();
+});
 
 async function loadClients(){
 
@@ -323,17 +865,17 @@ async function loadClients(){
  .order('created_at',{ascending:false});
 
  if(error){
-  console.error('Error cargando clientes:',error);
-  alert('No fue posible cargar los clientes desde Supabase.');
+  console.error(error);
+  alert('No fue posible cargar los clientes.');
   return;
  }
 
- clients=(data || []).map(row=>({
+ clients=(data||[]).map(row=>({
   id:Number(row.id),
-  name:row.nombre || '',
-  phone:row.celular || '',
-  address:row.direccion || '',
-  type:row.tipo_cliente || '',
+  name:row.nombre||'',
+  phone:row.celular||'',
+  address:row.direccion||'',
+  type:row.tipo_cliente||'',
   created:row.created_at
  }));
 }
@@ -354,9 +896,7 @@ async function addClient(){
  button.disabled=true;
  button.textContent='Guardando...';
 
- const {error}=await supabaseClient
- .from('clientes')
- .insert({
+ const {error}=await supabaseClient.from('clientes').insert({
   nombre:name,
   celular:phone,
   direccion:address,
@@ -370,8 +910,8 @@ async function addClient(){
  button.textContent='Guardar cliente';
 
  if(error){
-  console.error('Error guardando cliente:',error);
-  alert('NO se guardó el cliente. Revise la conexión.');
+  console.error(error);
+  alert('El cliente NO fue guardado.');
   return;
  }
 
@@ -385,11 +925,6 @@ async function addClient(){
  alert('Cliente guardado correctamente.');
 }
 
-
-/* ==============================
-   VENTAS EN SUPABASE
-   ============================== */
-
 async function loadSales(){
 
  const {data,error}=await supabaseClient
@@ -398,30 +933,24 @@ async function loadSales(){
  .order('created_at',{ascending:false});
 
  if(error){
-  console.error('Error cargando ventas:',error);
-
+  console.error(error);
   sales=[];
-
-  alert(
-   'No fue posible cargar las ventas desde Supabase. No registre ventas hasta revisar la conexión.'
-  );
-
+  alert('No fue posible cargar las ventas.');
   return;
  }
 
- sales=(data || []).map(row=>({
+ sales=(data||[]).map(row=>({
   id:Number(row.id),
   clientId:Number(row.cliente_id),
   qty:Number(row.cantidad)||0,
   price:Number(row.precio_unitario)||0,
   total:Number(row.total)||0,
-  pay:row.metodo_pago || '',
+  pay:row.metodo_pago||'',
   empties:Number(row.envases_recuperados)||0,
-  notes:row.observaciones || '',
+  notes:row.observaciones||'',
   date:row.created_at
  }));
 }
-
 
 async function addSale(){
 
@@ -438,18 +967,18 @@ async function addSale(){
   return;
  }
 
- if(!Number.isInteger(qty) || qty<=0){
+ if(!Number.isInteger(qty)||qty<=0){
   alert('Ingrese una cantidad válida.');
   return;
  }
 
- if(!Number.isFinite(price) || price<=0){
+ if(!Number.isFinite(price)||price<=0){
   alert('Ingrese un precio válido.');
   return;
  }
 
- if(!Number.isInteger(empties) || empties<0){
-  alert('Ingrese correctamente los envases recuperados.');
+ if(!Number.isInteger(empties)||empties<0){
+  alert('Revise los envases recuperados.');
   return;
  }
 
@@ -467,7 +996,7 @@ async function addSale(){
   total:total,
   metodo_pago:pay,
   envases_recuperados:empties,
-  observaciones:notes || null
+  observaciones:notes||null
  })
  .select()
  .single();
@@ -476,19 +1005,13 @@ async function addSale(){
  button.textContent='Registrar venta';
 
  if(error){
-  console.error('ERROR AL GUARDAR VENTA:',error);
-
-  alert(
-   'ATENCIÓN: la venta NO fue guardada. No la dé por registrada.'
-  );
-
+  console.error(error);
+  alert('ATENCIÓN: la venta NO fue guardada.');
   return;
  }
 
- if(!data || !data.id){
-  alert(
-   'ATENCIÓN: Supabase no confirmó la venta. No la dé por registrada.'
-  );
+ if(!data||!data.id){
+  alert('Supabase no confirmó la venta. No la dé por registrada.');
   return;
  }
 
@@ -500,30 +1023,23 @@ async function addSale(){
 
  render();
 
- alert(
-  'Venta guardada correctamente en la base de datos.'
- );
+ alert('Venta guardada correctamente en la base de datos.');
 }
-
-
-/* ==============================
-   PRODUCCIÓN LOCAL TEMPORAL
-   ============================== */
 
 function addProduction(){
 
  const qty=Number(document.getElementById('pqty').value);
  const reject=Number(document.getElementById('preject').value)||0;
 
- if(!qty || qty<=0){
+ if(!qty||qty<=0){
   alert('Ingrese una cantidad válida.');
   return;
  }
 
  localDb.production.push({
   id:Date.now(),
-  qty,
-  reject,
+  qty:qty,
+  reject:reject,
   date:new Date().toISOString()
  });
 
@@ -533,24 +1049,44 @@ function addProduction(){
  saveLocal();
 }
 
+function show(id,button){
 
-/* ==============================
-   NAVEGACIÓN Y RENDER
-   ============================== */
-
-function show(id){
-
- document.querySelectorAll('.panel').forEach(
-  x=>x.classList.remove('active')
- );
+ document.querySelectorAll('.panel').forEach(x=>{
+  x.classList.remove('active');
+ });
 
  document.getElementById(id).classList.add('active');
+
+ document.querySelectorAll('.menuBtn').forEach(x=>{
+  x.classList.remove('active');
+ });
+
+ if(button){
+  button.classList.add('active');
+ }
+
+ if(window.innerWidth<=760){
+  document.getElementById('sidebar').classList.remove('open');
+ }
 
  render();
 }
 
+function openPanel(id){
+
+ const button=document.querySelector(
+  '.menuBtn[data-panel="'+id+'"]'
+ );
+
+ show(id,button);
+}
+
+function toggleMenu(){
+ document.getElementById('sidebar').classList.toggle('open');
+}
+
 function clientName(id){
- return clients.find(c=>c.id===Number(id))?.name || 'Cliente';
+ return clients.find(c=>c.id===Number(id))?.name||'Cliente';
 }
 
 function render(){
@@ -560,31 +1096,37 @@ function render(){
 
  const units=todaySales.reduce((a,b)=>a+b.qty,0);
  const salesValue=todaySales.reduce((a,b)=>a+b.total,0);
- const prod=todayProd.reduce((a,b)=>a+b.qty,0);
+ const production=todayProd.reduce((a,b)=>a+b.qty,0);
 
  const debt=todaySales
  .filter(x=>x.pay==='Crédito')
  .reduce((a,b)=>a+b.total,0);
 
- document.getElementById('kUnits').textContent=units+' / 500';
+ document.getElementById('kUnits').textContent=units;
  document.getElementById('kSales').textContent=money(salesValue);
  document.getElementById('kClients').textContent=clients.length;
- document.getElementById('kProd').textContent=prod;
  document.getElementById('kDebt').textContent=money(debt);
+ document.getElementById('debtTotal').textContent=money(debt);
+
+ const percent=Math.min(100,Math.round((units/500)*100));
+
+ document.getElementById('goalProgress').style.width=percent+'%';
+ document.getElementById('goalText').textContent=units+' de 500 garrafones';
+ document.getElementById('goalPercent').textContent=percent+'%';
 
  document.getElementById('activity').innerHTML=
  todaySales.length
  ?
  todaySales.slice(0,5).map(s=>`
-  <div>
-   <span class="tag">${s.pay}</span>
-   ${clientName(s.clientId)}
+  <div style="padding:9px 0;border-bottom:1px solid #edf1f0">
+   <span class="badge">${s.pay}</span>
+   <b>${clientName(s.clientId)}</b>
    — ${s.qty} garrafón(es)
-   — <b>${money(s.total)}</b>
+   — ${money(s.total)}
   </div>
  `).join('')
  :
- 'Aún no hay movimientos.';
+ '<span style="color:#6b7d82">Aún no hay ventas registradas hoy.</span>';
 
  document.getElementById('vclient').innerHTML=
  '<option value="">Seleccione cliente</option>'+
@@ -603,7 +1145,7 @@ function render(){
  );
 
  document.getElementById('salesTable').innerHTML=table(
-  ['Fecha','Cliente','Cant.','Precio','Total','Pago','Envases'],
+  ['Fecha','Cliente','Cantidad','Precio','Total','Pago','Envases'],
   sales.map(s=>[
    new Date(s.date).toLocaleString('es-CO'),
    clientName(s.clientId),
@@ -626,16 +1168,15 @@ function render(){
 
  const allProd=localDb.production.reduce((a,b)=>a+b.qty,0);
  const allSold=sales.reduce((a,b)=>a+b.qty,0);
- const empties=sales.reduce((a,b)=>a+b.empties,0);
+ const recovered=sales.reduce((a,b)=>a+b.empties,0);
 
  document.getElementById('iFull').textContent=Math.max(0,allProd-allSold);
  document.getElementById('iSold').textContent=allSold;
- document.getElementById('iEmpty').textContent=empties;
+ document.getElementById('iEmpty').textContent=recovered;
 
  document.getElementById('map').innerHTML=
  clients.map((c,i)=>`
-  <div
-   class="pin"
+  <div class="pin"
    style="left:${8+(i*17)%78}%;top:${15+(i*23)%70}%">
    📍 ${c.name}
   </div>
@@ -645,10 +1186,12 @@ function render(){
  clients.length
  ?
  clients.map((c,i)=>
-  `Ruta ${1+(i%3)} • ${c.name} • ${c.address || 'Sin dirección'}`
- ).join('<br>')
+  `<div style="padding:7px 0">
+   <b>Ruta ${1+(i%3)}</b> · ${c.name} · ${c.address||'Sin dirección'}
+  </div>`
+ ).join('')
  :
- 'Registre clientes para construir las rutas.';
+ 'No hay clientes registrados.';
 }
 
 function table(headers,rows){
@@ -656,24 +1199,23 @@ function table(headers,rows){
  return `
  <table>
   <thead>
-   <tr>
-    ${headers.map(x=>`<th>${x}</th>`).join('')}
-   </tr>
+   <tr>${headers.map(x=>`<th>${x}</th>`).join('')}</tr>
   </thead>
   <tbody>
-   ${rows.map(r=>`
-    <tr>
-     ${r.map(x=>`<td>${x ?? ''}</td>`).join('')}
-    </tr>
-   `).join('')}
+   ${
+    rows.length
+    ?
+    rows.map(r=>`
+     <tr>${r.map(x=>`<td>${x??''}</td>`).join('')}</tr>
+    `).join('')
+    :
+    `<tr><td colspan="${headers.length}" style="text-align:center;color:#6b7d82;padding:30px">
+     No hay registros.
+    </td></tr>`
+   }
   </tbody>
  </table>`;
 }
-
-
-/* ==============================
-   EXPORTAR VENTAS DESDE SUPABASE
-   ============================== */
 
 function exportCSV(){
 
@@ -692,29 +1234,26 @@ function exportCSV(){
  ];
 
  const blob=new Blob(
-  [rows.map(r=>r.map(v=>`"${String(v ?? '').replaceAll('"','""')}"`).join(';')).join('\n')],
+  [rows.map(r=>
+   r.map(v=>`"${String(v??'').replaceAll('"','""')}"`).join(';')
+  ).join('\n')],
   {type:'text/csv;charset=utf-8'}
  );
 
  const url=URL.createObjectURL(blob);
- const link=document.createElement('a');
+ const a=document.createElement('a');
 
- link.href=url;
- link.download='ventas_agua_del_bosque.csv';
- link.click();
+ a.href=url;
+ a.download='ventas_agua_del_bosque.csv';
+ a.click();
 
  URL.revokeObjectURL(url);
 }
 
-
-/* ==============================
-   BORRAR SOLO PRODUCCIÓN LOCAL
-   ============================== */
-
 function resetDemo(){
 
  if(confirm(
-  '¿Borrar únicamente los datos LOCALES de producción? Clientes y ventas de Supabase NO serán eliminados.'
+  '¿Borrar únicamente la producción local de prueba? Clientes y ventas de Supabase NO serán eliminados.'
  )){
   localDb={production:[]};
   localStorage.setItem(KEY,JSON.stringify(localDb));
@@ -722,11 +1261,7 @@ function resetDemo(){
  }
 }
 
-
-/* ==============================
-   INICIO
-   ============================== */
-
+setDate();
 checkSession();
 
 supabaseClient.auth.onAuthStateChange((event,session)=>{
@@ -735,7 +1270,6 @@ supabaseClient.auth.onAuthStateChange((event,session)=>{
   document.getElementById('loginScreen').style.display='flex';
  }
 });
-
 </script>
 
 </body>
