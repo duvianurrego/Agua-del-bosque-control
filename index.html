@@ -3,119 +3,328 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Agua del Bosque Control</title>
+<title>Agua del Bosque Control 4.0</title>
 <link rel="manifest" href="manifest.json">
 
 <style>
-body{font-family:Arial,sans-serif;margin:0;background:#f4f8f8;color:#123}
-.top{background:linear-gradient(120deg,#063b5c,#07845f);color:white;padding:18px}
-.wrap{max-width:1180px;margin:auto;padding:18px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
-.card{background:white;padding:16px;border-radius:16px;box-shadow:0 4px 18px #0001}
-.big{font-size:30px;font-weight:800}
-.nav button,.btn{border:0;border-radius:10px;padding:10px 13px;margin:4px;background:#087b5c;color:white;cursor:pointer}
-.nav button{background:#ffffff22}
-.panel{display:none}
-.panel.active{display:block}
-input,select{padding:10px;border:1px solid #ccd;border-radius:8px;margin:5px;width:min(260px,90%);box-sizing:border-box}
-table{width:100%;border-collapse:collapse;background:white}
-th,td{padding:10px;border-bottom:1px solid #eee;text-align:left}
-.map{height:330px;border-radius:16px;background:linear-gradient(#dff3e8,#cfe6ef);position:relative;overflow:hidden}
-.pin{position:absolute;background:#087b5c;color:white;padding:7px;border-radius:12px;font-size:12px}
-.muted{color:#678}
-.danger{background:#b94141}
-.tag{display:inline-block;background:#e5f5ef;color:#087b5c;padding:5px 8px;border-radius:20px;font-size:12px}
+body{
+  font-family:Arial,sans-serif;
+  margin:0;
+  background:#f4f8f8;
+  color:#123;
+}
+
+.top{
+  background:linear-gradient(120deg,#063b5c,#07845f);
+  color:white;
+  padding:18px;
+}
+
+.wrap{
+  max-width:1180px;
+  margin:auto;
+  padding:18px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:12px;
+}
+
+.card{
+  background:white;
+  padding:16px;
+  border-radius:16px;
+  box-shadow:0 4px 18px #0001;
+}
+
+.big{
+  font-size:30px;
+  font-weight:800;
+}
+
+.nav button,.btn{
+  border:0;
+  border-radius:10px;
+  padding:10px 13px;
+  margin:4px;
+  background:#087b5c;
+  color:white;
+  cursor:pointer;
+}
+
+.nav button{
+  background:#ffffff22;
+}
+
+.panel{
+  display:none;
+}
+
+.panel.active{
+  display:block;
+}
+
+input,select{
+  padding:10px;
+  border:1px solid #ccd;
+  border-radius:8px;
+  margin:5px;
+  width:min(260px,90%);
+  box-sizing:border-box;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  background:white;
+}
+
+th,td{
+  padding:10px;
+  border-bottom:1px solid #eee;
+  text-align:left;
+}
+
+.map{
+  height:330px;
+  border-radius:16px;
+  background:linear-gradient(#dff3e8,#cfe6ef);
+  position:relative;
+  overflow:hidden;
+}
+
+.pin{
+  position:absolute;
+  background:#087b5c;
+  color:white;
+  padding:7px;
+  border-radius:12px;
+  font-size:12px;
+}
+
+.muted{
+  color:#678;
+}
+
+.danger{
+  background:#b94141;
+}
+
+.tag{
+  display:inline-block;
+  background:#e5f5ef;
+  color:#087b5c;
+  padding:5px 8px;
+  border-radius:20px;
+  font-size:12px;
+}
+
+
+/* =====================================================
+   LOGIN CON IMAGEN DE FONDO
+   ===================================================== */
 
 #loginScreen{
-min-height:100vh;
-display:flex;
-align-items:center;
-justify-content:center;
-padding:20px;
-box-sizing:border-box;
-background:linear-gradient(135deg,#063b5c,#07845f)
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  box-sizing:border-box;
+
+  background-image:
+    linear-gradient(rgba(2,32,46,.20),rgba(2,45,40,.25)),
+    url('ChatGPT%20Image%2018%20sept%202026%2C%2014_37_26.png');
+
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+  background-attachment:fixed;
 }
 
 .loginCard{
-background:white;
-width:min(390px,100%);
-padding:30px;
-border-radius:22px;
-box-shadow:0 18px 50px #0003;
-text-align:center
+  background:rgba(255,255,255,.91);
+  width:min(390px,100%);
+  padding:30px;
+  border-radius:22px;
+  box-shadow:0 18px 50px rgba(0,0,0,.28);
+  text-align:center;
+  backdrop-filter:blur(5px);
+  -webkit-backdrop-filter:blur(5px);
+  border:1px solid rgba(255,255,255,.65);
 }
 
-.loginCard h1{margin-bottom:5px;color:#063b5c}
-.loginCard input{width:100%;max-width:none;margin:7px 0}
-.loginCard .btn{width:100%;margin:10px 0 0;padding:12px}
-#loginMessage{margin-top:12px;font-size:14px}
-#app{display:none}
+.loginCard h1{
+  margin-bottom:5px;
+  color:#063b5c;
+}
+
+.loginCard h3{
+  color:#123;
+}
+
+.loginCard input{
+  width:100%;
+  max-width:none;
+  margin:7px 0;
+  background:rgba(255,255,255,.94);
+}
+
+.loginCard .btn{
+  width:100%;
+  margin:10px 0 0;
+  padding:12px;
+  font-weight:bold;
+}
+
+#loginMessage{
+  margin-top:12px;
+  font-size:14px;
+}
+
+#app{
+  display:none;
+}
 
 .userbar{
-font-size:13px;
-margin-top:10px;
-display:flex;
-gap:8px;
-align-items:center;
-flex-wrap:wrap
+  font-size:13px;
+  margin-top:10px;
+  display:flex;
+  gap:8px;
+  align-items:center;
+  flex-wrap:wrap;
 }
 
 .logout{
-background:#ffffff22;
-border:1px solid #ffffff55;
-color:white;
-padding:6px 10px;
-border-radius:8px;
-cursor:pointer
+  background:#ffffff22;
+  border:1px solid #ffffff55;
+  color:white;
+  padding:6px 10px;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+@media(max-width:600px){
+  #loginScreen{
+    background-attachment:scroll;
+    background-position:center;
+  }
+
+  .loginCard{
+    padding:24px 20px;
+  }
 }
 </style>
 </head>
 
 <body>
 
+
+<!-- =====================================================
+     LOGIN
+     ===================================================== -->
+
 <div id="loginScreen">
-<div class="loginCard">
 
-<h1>Agua del Bosque</h1>
-<p class="muted">Control 4.0</p>
-<h3>Inicio de sesión</h3>
+  <div class="loginCard">
 
-<input id="loginEmail" type="email"
-placeholder="Correo electrónico"
-autocomplete="username">
+    <h1>Agua del Bosque</h1>
 
-<input id="loginPassword" type="password"
-placeholder="Contraseña"
-autocomplete="current-password">
+    <p class="muted">
+      Control 4.0
+    </p>
 
-<button class="btn" onclick="login()">Ingresar</button>
+    <h3>Inicio de sesión</h3>
 
-<div id="loginMessage" class="muted"></div>
+    <input
+      id="loginEmail"
+      type="email"
+      placeholder="Correo electrónico"
+      autocomplete="username"
+    >
+
+    <input
+      id="loginPassword"
+      type="password"
+      placeholder="Contraseña"
+      autocomplete="current-password"
+    >
+
+    <button
+      class="btn"
+      onclick="login()"
+    >
+      Ingresar
+    </button>
+
+    <div
+      id="loginMessage"
+      class="muted"
+    ></div>
+
+  </div>
 
 </div>
-</div>
 
+
+<!-- =====================================================
+     APLICACIÓN
+     ===================================================== -->
 
 <div id="app">
 
 <div class="top">
+
 <div class="wrap">
 
 <b>AGUA DEL BOSQUE CONTROL 4.0</b>
 
 <div class="userbar">
+
 <span id="currentUser"></span>
-<button class="logout" onclick="logout()">Cerrar sesión</button>
+
+<button
+  class="logout"
+  onclick="logout()"
+>
+Cerrar sesión
+</button>
+
 </div>
 
+
 <div class="nav">
-<button onclick="show('inicio')">Inicio</button>
-<button onclick="show('clientes')">Clientes</button>
-<button onclick="show('ventas')">Ventas</button>
-<button onclick="show('rutas')">Mapa/Rutas</button>
-<button onclick="show('produccion')">Producción</button>
-<button onclick="show('inventario')">Inventario</button>
-<button onclick="show('reportes')">Reportes</button>
+
+<button onclick="show('inicio')">
+Inicio
+</button>
+
+<button onclick="show('clientes')">
+Clientes
+</button>
+
+<button onclick="show('ventas')">
+Ventas
+</button>
+
+<button onclick="show('rutas')">
+Mapa/Rutas
+</button>
+
+<button onclick="show('produccion')">
+Producción
+</button>
+
+<button onclick="show('inventario')">
+Inventario
+</button>
+
+<button onclick="show('reportes')">
+Reportes
+</button>
+
 </div>
 
 </div>
@@ -124,7 +333,11 @@ autocomplete="current-password">
 
 <main class="wrap">
 
-<section id="inicio" class="panel active">
+
+<section
+  id="inicio"
+  class="panel active"
+>
 
 <h2>Tablero de control</h2>
 
@@ -158,22 +371,45 @@ autocomplete="current-password">
 </div>
 
 <h3>Actividad reciente</h3>
-<div class="card" id="activity">Aún no hay movimientos.</div>
+
+<div
+  class="card"
+  id="activity"
+>
+Aún no hay movimientos.
+</div>
 
 </section>
 
 
-<section id="clientes" class="panel">
+<!-- CLIENTES -->
+
+<section
+  id="clientes"
+  class="panel"
+>
 
 <h2>Clientes</h2>
 
 <div class="card">
 
-<input id="cname" placeholder="Nombre / negocio">
-<input id="cphone" placeholder="Celular">
-<input id="caddress" placeholder="Dirección / sector">
+<input
+  id="cname"
+  placeholder="Nombre / negocio"
+>
+
+<input
+  id="cphone"
+  placeholder="Celular"
+>
+
+<input
+  id="caddress"
+  placeholder="Dirección / sector"
+>
 
 <select id="ctype">
+
 <option>Hogar</option>
 <option>Conjunto</option>
 <option>Empresa</option>
@@ -181,9 +417,15 @@ autocomplete="current-password">
 <option>Restaurante</option>
 <option>Gimnasio</option>
 <option>Distribuidor</option>
+
 </select>
 
-<button class="btn" onclick="addClient()">Guardar cliente</button>
+<button
+  class="btn"
+  onclick="addClient()"
+>
+Guardar cliente
+</button>
 
 </div>
 
@@ -192,7 +434,12 @@ autocomplete="current-password">
 </section>
 
 
-<section id="ventas" class="panel">
+<!-- VENTAS -->
+
+<section
+  id="ventas"
+  class="panel"
+>
 
 <h2>Registrar venta</h2>
 
@@ -200,23 +447,43 @@ autocomplete="current-password">
 
 <select id="vclient"></select>
 
-<input id="vqty" type="number" min="1"
-value="1" placeholder="Cantidad">
+<input
+  id="vqty"
+  type="number"
+  min="1"
+  value="1"
+  placeholder="Cantidad"
+>
 
-<input id="vprice" type="number"
-value="7000" placeholder="Precio unitario">
+<input
+  id="vprice"
+  type="number"
+  value="7000"
+  placeholder="Precio unitario"
+>
 
 <select id="vpay">
+
 <option>Efectivo</option>
 <option>Transferencia</option>
 <option>Crédito</option>
+
 </select>
 
-<input id="vempties" type="number"
-min="0" value="0"
-placeholder="Envases recuperados">
+<input
+  id="vempties"
+  type="number"
+  min="0"
+  value="0"
+  placeholder="Envases recuperados"
+>
 
-<button class="btn" onclick="addSale()">Registrar venta</button>
+<button
+  class="btn"
+  onclick="addSale()"
+>
+Registrar venta
+</button>
 
 </div>
 
@@ -225,7 +492,12 @@ placeholder="Envases recuperados">
 </section>
 
 
-<section id="rutas" class="panel">
+<!-- RUTAS -->
+
+<section
+  id="rutas"
+  class="panel"
+>
 
 <h2>Mapa operativo y rutas</h2>
 
@@ -234,27 +506,49 @@ Esta versión de prueba ubica clientes de forma simulada.
 La siguiente conexión usará coordenadas y mapas reales.
 </p>
 
-<div class="map" id="map"></div>
+<div
+  class="map"
+  id="map"
+></div>
 
 <h3>Pedidos pendientes</h3>
-<div id="routeList" class="card"></div>
+
+<div
+  id="routeList"
+  class="card"
+></div>
 
 </section>
 
 
-<section id="produccion" class="panel">
+<!-- PRODUCCIÓN -->
+
+<section
+  id="produccion"
+  class="panel"
+>
 
 <h2>Producción</h2>
 
 <div class="card">
 
-<input id="pqty" type="number"
-placeholder="Garrafones producidos">
+<input
+  id="pqty"
+  type="number"
+  placeholder="Garrafones producidos"
+>
 
-<input id="preject" type="number"
-value="0" placeholder="Rechazados">
+<input
+  id="preject"
+  type="number"
+  value="0"
+  placeholder="Rechazados"
+>
 
-<button class="btn" onclick="addProduction()">
+<button
+  class="btn"
+  onclick="addProduction()"
+>
 Registrar producción
 </button>
 
@@ -265,25 +559,62 @@ Registrar producción
 </section>
 
 
-<section id="inventario" class="panel">
+<!-- INVENTARIO -->
+
+<section
+  id="inventario"
+  class="panel"
+>
 
 <h2>Inventario de garrafones</h2>
 
 <div class="grid">
 
 <div class="card">
-<span class="muted">Llenos estimados</span>
-<div class="big" id="iFull">0</div>
+
+<span class="muted">
+Llenos estimados
+</span>
+
+<div
+  class="big"
+  id="iFull"
+>
+0
 </div>
 
-<div class="card">
-<span class="muted">Vendidos acumulados</span>
-<div class="big" id="iSold">0</div>
 </div>
 
+
 <div class="card">
-<span class="muted">Envases recuperados</span>
-<div class="big" id="iEmpty">0</div>
+
+<span class="muted">
+Vendidos acumulados
+</span>
+
+<div
+  class="big"
+  id="iSold"
+>
+0
+</div>
+
+</div>
+
+
+<div class="card">
+
+<span class="muted">
+Envases recuperados
+</span>
+
+<div
+  class="big"
+  id="iEmpty"
+>
+0
+</div>
+
 </div>
 
 </div>
@@ -291,17 +622,28 @@ Registrar producción
 </section>
 
 
-<section id="reportes" class="panel">
+<!-- REPORTES -->
+
+<section
+  id="reportes"
+  class="panel"
+>
 
 <h2>Reportes</h2>
 
 <div class="card">
 
-<button class="btn" onclick="exportCSV()">
+<button
+  class="btn"
+  onclick="exportCSV()"
+>
 Exportar ventas CSV
 </button>
 
-<button class="btn danger" onclick="resetDemo()">
+<button
+  class="btn danger"
+  onclick="resetDemo()"
+>
 Borrar datos locales de prueba
 </button>
 
@@ -316,8 +658,13 @@ en este navegador.
 </section>
 
 </main>
+
 </div>
 
+
+<!-- =====================================================
+     SUPABASE
+     ===================================================== -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -331,796 +678,1122 @@ const SUPABASE_PUBLISHABLE_KEY =
 
 const supabaseClient =
 window.supabase.createClient(
-SUPABASE_URL,
-SUPABASE_PUBLISHABLE_KEY
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
 );
 
 
-/* =========================
+/* =====================================================
    DATOS LOCALES TEMPORALES
-========================= */
+   ===================================================== */
 
-const KEY='adb_control_v1';
+const KEY =
+'adb_control_v1';
 
-let localDb=JSON.parse(
-localStorage.getItem(KEY) ||
-'{"clients":[],"sales":[],"production":[]}'
+let localDb =
+JSON.parse(
+  localStorage.getItem(KEY) ||
+  '{"clients":[],"sales":[],"production":[]}'
 );
 
-/* Los clientes ahora vienen de Supabase */
-let clients=[];
+let clients = [];
 
 
 function saveLocal(){
 
-localStorage.setItem(
-KEY,
-JSON.stringify(localDb)
-);
+  localStorage.setItem(
+    KEY,
+    JSON.stringify(localDb)
+  );
 
-render();
+  render();
 
 }
 
 
-/* =========================
+/* =====================================================
    AUTENTICACIÓN
-========================= */
+   ===================================================== */
 
 async function login(){
 
-const email=
-document.getElementById('loginEmail').value.trim();
+  const email =
+  document
+  .getElementById('loginEmail')
+  .value
+  .trim();
 
-const password=
-document.getElementById('loginPassword').value;
+  const password =
+  document
+  .getElementById('loginPassword')
+  .value;
 
-const message=
-document.getElementById('loginMessage');
+  const message =
+  document
+  .getElementById('loginMessage');
 
-if(!email || !password){
-message.textContent='Ingrese correo y contraseña.';
-return;
-}
 
-message.textContent='Ingresando...';
+  if(!email || !password){
 
-const {data,error}=
-await supabaseClient.auth.signInWithPassword({
-email,
-password
-});
+    message.textContent =
+    'Ingrese correo y contraseña.';
 
-if(error){
+    return;
+  }
 
-console.error(error);
 
-message.textContent=
-'No fue posible ingresar. Verifique el correo y la contraseña.';
+  message.textContent =
+  'Ingresando...';
 
-return;
-}
 
-message.textContent='';
+  const {data,error} =
+  await supabaseClient.auth.signInWithPassword({
+    email,
+    password
+  });
 
-await showApplication(data.user);
+
+  if(error){
+
+    console.error(error);
+
+    message.textContent =
+    'No fue posible ingresar. Verifique el correo y la contraseña.';
+
+    return;
+  }
+
+
+  message.textContent = '';
+
+  await showApplication(
+    data.user
+  );
 
 }
 
 
 async function logout(){
 
-await supabaseClient.auth.signOut();
+  await supabaseClient.auth.signOut();
 
-document.getElementById('app').style.display='none';
+  document
+  .getElementById('app')
+  .style.display =
+  'none';
 
-document.getElementById('loginScreen').style.display='flex';
+  document
+  .getElementById('loginScreen')
+  .style.display =
+  'flex';
 
-document.getElementById('loginPassword').value='';
+  document
+  .getElementById('loginPassword')
+  .value =
+  '';
 
 }
 
 
 async function showApplication(user){
 
-document.getElementById('loginScreen').style.display='none';
+  document
+  .getElementById('loginScreen')
+  .style.display =
+  'none';
 
-document.getElementById('app').style.display='block';
+  document
+  .getElementById('app')
+  .style.display =
+  'block';
 
-document.getElementById('currentUser').textContent=
-user?.email || 'Usuario autorizado';
+  document
+  .getElementById('currentUser')
+  .textContent =
+  user?.email ||
+  'Usuario autorizado';
 
-/* Cargar clientes reales desde Supabase */
-await loadClients();
+  await loadClients();
 
-render();
+  render();
 
 }
 
 
 async function checkSession(){
 
-const {data}=await supabaseClient.auth.getSession();
+  const {data} =
+  await supabaseClient.auth.getSession();
 
-if(data.session){
 
-await showApplication(data.session.user);
+  if(data.session){
 
-}else{
+    await showApplication(
+      data.session.user
+    );
 
-document.getElementById('loginScreen').style.display='flex';
+  }else{
 
-document.getElementById('app').style.display='none';
+    document
+    .getElementById('loginScreen')
+    .style.display =
+    'flex';
 
-}
+    document
+    .getElementById('app')
+    .style.display =
+    'none';
+
+  }
 
 }
 
 
 document
 .getElementById('loginPassword')
-.addEventListener('keydown',function(event){
+.addEventListener(
+  'keydown',
+  function(event){
 
-if(event.key==='Enter'){
-login();
-}
+    if(event.key === 'Enter'){
+      login();
+    }
 
-});
+  }
+);
 
 
-/* =========================
-   CLIENTES - SUPABASE
-========================= */
+/* =====================================================
+   CLIENTES EN SUPABASE
+   ===================================================== */
 
 async function loadClients(){
 
-const {data,error}=
-await supabaseClient
-.from('clientes')
-.select('*')
-.order('created_at',{ascending:false});
+  const {data,error} =
+  await supabaseClient
+  .from('clientes')
+  .select('*')
+  .order(
+    'created_at',
+    {ascending:false}
+  );
 
-if(error){
 
-console.error('Error cargando clientes:',error);
+  if(error){
 
-alert(
-'No fue posible cargar los clientes desde Supabase.'
-);
+    console.error(
+      'Error cargando clientes:',
+      error
+    );
 
-return;
+    alert(
+      'No fue posible cargar los clientes desde Supabase.'
+    );
+
+    return;
+
+  }
+
+
+  clients =
+  (data || []).map(
+    row => ({
+
+      id:Number(row.id),
+
+      name:
+      row.nombre || '',
+
+      phone:
+      row.celular || '',
+
+      address:
+      row.direccion || '',
+
+      type:
+      row.tipo_cliente || '',
+
+      created:
+      row.created_at
+
+    })
+  );
+
 }
 
 
-/* Adaptamos nombres de Supabase al resto de la app */
-
-clients=(data || []).map(row=>({
-
-id:Number(row.id),
-
-name:row.nombre || '',
-
-phone:row.celular || '',
-
-address:row.direccion || '',
-
-type:row.tipo_cliente || '',
-
-created:row.created_at
-
-}));
-
-}
-
+/* =====================================================
+   GUARDAR CLIENTE EN SUPABASE
+   ===================================================== */
 
 async function addClient(){
 
-const name=
-document.getElementById('cname').value.trim();
-
-const phone=
-document.getElementById('cphone').value.trim();
-
-const address=
-document.getElementById('caddress').value.trim();
-
-const type=
-document.getElementById('ctype').value;
+  const name =
+  document
+  .getElementById('cname')
+  .value
+  .trim();
 
 
-if(!name){
+  const phone =
+  document
+  .getElementById('cphone')
+  .value
+  .trim();
 
-alert('Ingrese el nombre');
 
-return;
+  const address =
+  document
+  .getElementById('caddress')
+  .value
+  .trim();
+
+
+  const type =
+  document
+  .getElementById('ctype')
+  .value;
+
+
+  if(!name){
+
+    alert(
+      'Ingrese el nombre'
+    );
+
+    return;
+
+  }
+
+
+  const button =
+  document.querySelector(
+    "#clientes button[onclick='addClient()']"
+  );
+
+
+  if(button){
+
+    button.disabled = true;
+
+    button.textContent =
+    'Guardando...';
+
+  }
+
+
+  const {error} =
+  await supabaseClient
+  .from('clientes')
+  .insert({
+
+    nombre:name,
+
+    celular:phone,
+
+    direccion:address,
+
+    tipo_cliente:type,
+
+    garrafones_cliente:0,
+
+    saldo_cartera:0,
+
+    activo:true
+
+  });
+
+
+  if(button){
+
+    button.disabled = false;
+
+    button.textContent =
+    'Guardar cliente';
+
+  }
+
+
+  if(error){
+
+    console.error(
+      'Error guardando cliente:',
+      error
+    );
+
+    alert(
+      'No fue posible guardar el cliente. Revise la conexión con Supabase.'
+    );
+
+    return;
+
+  }
+
+
+  document
+  .getElementById('cname')
+  .value = '';
+
+
+  document
+  .getElementById('cphone')
+  .value = '';
+
+
+  document
+  .getElementById('caddress')
+  .value = '';
+
+
+  await loadClients();
+
+  render();
+
+
+  alert(
+    'Cliente guardado correctamente.'
+  );
 
 }
 
 
-const button=
-document.querySelector(
-"#clientes button[onclick='addClient()']"
-);
-
-if(button){
-
-button.disabled=true;
-button.textContent='Guardando...';
-
-}
-
-
-const {data,error}=
-await supabaseClient
-.from('clientes')
-.insert({
-
-nombre:name,
-
-celular:phone,
-
-direccion:address,
-
-tipo_cliente:type,
-
-garrafones_cliente:0,
-
-saldo_cartera:0,
-
-activo:true
-
-})
-.select()
-.single();
-
-
-if(button){
-
-button.disabled=false;
-button.textContent='Guardar cliente';
-
-}
-
-
-if(error){
-
-console.error('Error guardando cliente:',error);
-
-alert(
-'No fue posible guardar el cliente. Revise la conexión con Supabase.'
-);
-
-return;
-
-}
-
-
-document.getElementById('cname').value='';
-document.getElementById('cphone').value='';
-document.getElementById('caddress').value='';
-
-
-await loadClients();
-
-render();
-
-alert('Cliente guardado correctamente.');
-
-}
-
-
-/* =========================
-   VENTAS - LOCAL TEMPORAL
-========================= */
+/* =====================================================
+   VENTAS - TEMPORALMENTE LOCALES
+   ===================================================== */
 
 function addSale(){
 
-const vclient=
-document.getElementById('vclient');
+  const vclient =
+  document
+  .getElementById('vclient');
 
-if(!vclient.value){
 
-return alert(
-'Primero registre un cliente'
-);
+  if(!vclient.value){
+
+    return alert(
+      'Primero registre un cliente'
+    );
+
+  }
+
+
+  let q =
+  +document
+  .getElementById('vqty')
+  .value;
+
+
+  let p =
+  +document
+  .getElementById('vprice')
+  .value;
+
+
+  let e =
+  +document
+  .getElementById('vempties')
+  .value;
+
+
+  localDb.sales.push({
+
+    id:Date.now(),
+
+    clientId:
+    +vclient.value,
+
+    qty:q,
+
+    price:p,
+
+    total:q*p,
+
+    pay:
+    document
+    .getElementById('vpay')
+    .value,
+
+    empties:e,
+
+    date:
+    new Date().toISOString()
+
+  });
+
+
+  saveLocal();
 
 }
 
-let q=
-+document.getElementById('vqty').value;
 
-let p=
-+document.getElementById('vprice').value;
-
-let e=
-+document.getElementById('vempties').value;
-
-
-localDb.sales.push({
-
-id:Date.now(),
-
-clientId:+vclient.value,
-
-qty:q,
-
-price:p,
-
-total:q*p,
-
-pay:
-document.getElementById('vpay').value,
-
-empties:e,
-
-date:new Date().toISOString()
-
-});
-
-saveLocal();
-
-}
-
-
-/* =========================
-   PRODUCCIÓN - LOCAL
-========================= */
+/* =====================================================
+   PRODUCCIÓN - TEMPORALMENTE LOCAL
+   ===================================================== */
 
 function addProduction(){
 
-let q=
-+document.getElementById('pqty').value;
-
-let r=
-+document.getElementById('preject').value;
-
-if(!q)return;
+  let q =
+  +document
+  .getElementById('pqty')
+  .value;
 
 
-localDb.production.push({
-
-id:Date.now(),
-
-qty:q,
-
-reject:r,
-
-date:new Date().toISOString()
-
-});
+  let r =
+  +document
+  .getElementById('preject')
+  .value;
 
 
-document.getElementById('pqty').value='';
+  if(!q){
+    return;
+  }
 
-saveLocal();
+
+  localDb.production.push({
+
+    id:Date.now(),
+
+    qty:q,
+
+    reject:r,
+
+    date:
+    new Date().toISOString()
+
+  });
+
+
+  document
+  .getElementById('pqty')
+  .value =
+  '';
+
+
+  saveLocal();
 
 }
 
 
-/* =========================
+/* =====================================================
    UTILIDADES
-========================= */
+   ===================================================== */
 
-const money=n=>
+const money =
+n =>
 new Intl.NumberFormat(
-'es-CO',
-{
-style:'currency',
-currency:'COP',
-maximumFractionDigits:0
-}
+  'es-CO',
+  {
+    style:'currency',
+    currency:'COP',
+    maximumFractionDigits:0
+  }
 ).format(n || 0);
 
 
 function today(s){
 
-return new Date(s).toDateString()===
-new Date().toDateString();
+  return (
+    new Date(s).toDateString()
+    ===
+    new Date().toDateString()
+  );
 
 }
 
 
 function show(id){
 
-document
-.querySelectorAll('.panel')
-.forEach(x=>x.classList.remove('active'));
+  document
+  .querySelectorAll('.panel')
+  .forEach(
+    x =>
+    x.classList.remove('active')
+  );
 
-document
-.getElementById(id)
-.classList.add('active');
 
-render();
+  document
+  .getElementById(id)
+  .classList.add('active');
+
+
+  render();
 
 }
 
 
 function clientName(id){
 
-return clients.find(
-c=>c.id===Number(id)
-)?.name || 'Cliente';
+  return (
+    clients.find(
+      c =>
+      c.id === Number(id)
+    )?.name
+    ||
+    'Cliente'
+  );
 
 }
 
 
-/* =========================
+/* =====================================================
    RENDER
-========================= */
+   ===================================================== */
 
 function render(){
 
-let ts=
-localDb.sales.filter(
-x=>today(x.date)
-);
+  let ts =
+  localDb.sales.filter(
+    x =>
+    today(x.date)
+  );
 
-let tp=
-localDb.production.filter(
-x=>today(x.date)
-);
 
+  let tp =
+  localDb.production.filter(
+    x =>
+    today(x.date)
+  );
 
-let units=
-ts.reduce(
-(a,b)=>a+b.qty,
-0
-);
 
-let sales=
-ts.reduce(
-(a,b)=>a+b.total,
-0
-);
+  let units =
+  ts.reduce(
+    (a,b) =>
+    a+b.qty,
+    0
+  );
 
-let prod=
-tp.reduce(
-(a,b)=>a+b.qty,
-0
-);
 
-let debt=
-ts
-.filter(x=>x.pay==='Crédito')
-.reduce(
-(a,b)=>a+b.total,
-0
-);
+  let sales =
+  ts.reduce(
+    (a,b) =>
+    a+b.total,
+    0
+  );
 
 
-document.getElementById('kUnits').textContent=
-units+' / 500';
+  let prod =
+  tp.reduce(
+    (a,b) =>
+    a+b.qty,
+    0
+  );
 
-document.getElementById('kSales').textContent=
-money(sales);
 
-document.getElementById('kClients').textContent=
-clients.length;
+  let debt =
+  ts
+  .filter(
+    x =>
+    x.pay === 'Crédito'
+  )
+  .reduce(
+    (a,b) =>
+    a+b.total,
+    0
+  );
 
-document.getElementById('kProd').textContent=
-prod;
 
-document.getElementById('kDebt').textContent=
-money(debt);
+  document
+  .getElementById('kUnits')
+  .textContent =
+  units + ' / 500';
 
 
-document.getElementById('activity').innerHTML=
+  document
+  .getElementById('kSales')
+  .textContent =
+  money(sales);
 
-ts.length
 
-?
+  document
+  .getElementById('kClients')
+  .textContent =
+  clients.length;
 
-ts
-.slice(-5)
-.reverse()
-.map(s=>
-`<div>
-<span class="tag">${s.pay}</span>
-${clientName(s.clientId)}
-—
-${s.qty} garrafón(es)
-—
-<b>${money(s.total)}</b>
-</div>`
-)
-.join('')
 
-:
+  document
+  .getElementById('kProd')
+  .textContent =
+  prod;
 
-'Aún no hay movimientos.';
 
+  document
+  .getElementById('kDebt')
+  .textContent =
+  money(debt);
 
-document.getElementById('vclient').innerHTML=
 
-'<option value="">Seleccione cliente</option>'
+  document
+  .getElementById('activity')
+  .innerHTML =
 
-+
+  ts.length
 
-clients.map(c=>
-`<option value="${c.id}">
-${c.name}
-</option>`
-).join('');
+  ?
 
+  ts
+  .slice(-5)
+  .reverse()
+  .map(
+    s =>
 
-document.getElementById('clientsTable').innerHTML=
+    `<div>
 
-table(
-['Cliente','Tipo','Celular','Dirección'],
+    <span class="tag">
+    ${s.pay}
+    </span>
 
-clients.map(c=>[
-c.name,
-c.type,
-c.phone,
-c.address
-])
-);
+    ${clientName(s.clientId)}
 
+    —
 
-document.getElementById('salesTable').innerHTML=
+    ${s.qty} garrafón(es)
 
-table(
-['Fecha','Cliente','Cant.','Total','Pago'],
+    —
 
-localDb.sales
-.slice()
-.reverse()
-.map(s=>[
+    <b>
+    ${money(s.total)}
+    </b>
 
-new Date(s.date)
-.toLocaleString('es-CO'),
+    </div>`
 
-clientName(s.clientId),
+  )
+  .join('')
 
-s.qty,
+  :
 
-money(s.total),
+  'Aún no hay movimientos.';
 
-s.pay
 
-])
-);
+  document
+  .getElementById('vclient')
+  .innerHTML =
 
+  '<option value="">Seleccione cliente</option>'
 
-document.getElementById('prodTable').innerHTML=
+  +
 
-table(
-['Fecha','Producidos','Rechazados'],
+  clients
+  .map(
+    c =>
 
-localDb.production
-.slice()
-.reverse()
-.map(p=>[
+    `<option value="${c.id}">
+    ${c.name}
+    </option>`
 
-new Date(p.date)
-.toLocaleString('es-CO'),
+  )
+  .join('');
 
-p.qty,
 
-p.reject
+  document
+  .getElementById('clientsTable')
+  .innerHTML =
 
-])
-);
+  table(
 
+    [
+      'Cliente',
+      'Tipo',
+      'Celular',
+      'Dirección'
+    ],
 
-let allProd=
-localDb.production.reduce(
-(a,b)=>a+b.qty,
-0
-);
+    clients.map(
+      c => [
 
-let allSold=
-localDb.sales.reduce(
-(a,b)=>a+b.qty,
-0
-);
+        c.name,
 
-let empt=
-localDb.sales.reduce(
-(a,b)=>a+b.empties,
-0
-);
+        c.type,
 
+        c.phone,
 
-document.getElementById('iFull').textContent=
-Math.max(0,allProd-allSold);
+        c.address
 
-document.getElementById('iSold').textContent=
-allSold;
+      ]
+    )
 
-document.getElementById('iEmpty').textContent=
-empt;
+  );
 
 
-document.getElementById('map').innerHTML=
+  document
+  .getElementById('salesTable')
+  .innerHTML =
 
-clients.map((c,i)=>
+  table(
 
-`<div
-class="pin"
-style="
-left:${8+(i*17)%78}%;
-top:${15+(i*23)%70}%
-">
-📍 ${c.name}
-</div>`
+    [
+      'Fecha',
+      'Cliente',
+      'Cant.',
+      'Total',
+      'Pago'
+    ],
 
-).join('');
+    localDb.sales
+    .slice()
+    .reverse()
+    .map(
+      s => [
 
+        new Date(
+          s.date
+        )
+        .toLocaleString(
+          'es-CO'
+        ),
 
-document.getElementById('routeList').innerHTML=
+        clientName(
+          s.clientId
+        ),
 
-clients.length
+        s.qty,
 
-?
+        money(
+          s.total
+        ),
 
-clients.map((c,i)=>
+        s.pay
 
-`Ruta ${1+(i%3)}
-• ${c.name}
-• ${c.address || 'Sin dirección'}`
+      ]
+    )
 
-).join('<br>')
+  );
 
-:
 
-'Registre clientes para construir las rutas.';
+  document
+  .getElementById('prodTable')
+  .innerHTML =
+
+  table(
+
+    [
+      'Fecha',
+      'Producidos',
+      'Rechazados'
+    ],
+
+    localDb.production
+    .slice()
+    .reverse()
+    .map(
+      p => [
+
+        new Date(
+          p.date
+        )
+        .toLocaleString(
+          'es-CO'
+        ),
+
+        p.qty,
+
+        p.reject
+
+      ]
+    )
+
+  );
+
+
+  let allProd =
+  localDb.production.reduce(
+    (a,b) =>
+    a+b.qty,
+    0
+  );
+
+
+  let allSold =
+  localDb.sales.reduce(
+    (a,b) =>
+    a+b.qty,
+    0
+  );
+
+
+  let empt =
+  localDb.sales.reduce(
+    (a,b) =>
+    a+b.empties,
+    0
+  );
+
+
+  document
+  .getElementById('iFull')
+  .textContent =
+  Math.max(
+    0,
+    allProd-allSold
+  );
+
+
+  document
+  .getElementById('iSold')
+  .textContent =
+  allSold;
+
+
+  document
+  .getElementById('iEmpty')
+  .textContent =
+  empt;
+
+
+  document
+  .getElementById('map')
+  .innerHTML =
+
+  clients
+  .map(
+    (c,i) =>
+
+    `<div
+    class="pin"
+    style="
+    left:${8+(i*17)%78}%;
+    top:${15+(i*23)%70}%
+    ">
+
+    📍 ${c.name}
+
+    </div>`
+
+  )
+  .join('');
+
+
+  document
+  .getElementById('routeList')
+  .innerHTML =
+
+  clients.length
+
+  ?
+
+  clients
+  .map(
+    (c,i) =>
+
+    `Ruta ${1+(i%3)}
+    • ${c.name}
+    • ${c.address || 'Sin dirección'}`
+
+  )
+  .join('<br>')
+
+  :
+
+  'Registre clientes para construir las rutas.';
 
 }
 
 
-/* =========================
+/* =====================================================
    TABLAS
-========================= */
+   ===================================================== */
 
 function table(h,rows){
 
-return `
-<table>
+  return `
 
-<thead>
-<tr>
-${h.map(x=>`<th>${x}</th>`).join('')}
-</tr>
-</thead>
+  <table>
 
-<tbody>
+  <thead>
 
-${rows.map(r=>
-`<tr>
-${r.map(x=>
-`<td>${x ?? ''}</td>`
-).join('')}
-</tr>`
-).join('')}
+  <tr>
 
-</tbody>
+  ${
+    h.map(
+      x =>
+      `<th>${x}</th>`
+    )
+    .join('')
+  }
 
-</table>
-`;
+  </tr>
+
+  </thead>
+
+  <tbody>
+
+  ${
+    rows.map(
+      r =>
+
+      `<tr>
+
+      ${
+        r.map(
+          x =>
+          `<td>${x ?? ''}</td>`
+        )
+        .join('')
+      }
+
+      </tr>`
+
+    )
+    .join('')
+  }
+
+  </tbody>
+
+  </table>
+
+  `;
 
 }
 
 
-/* =========================
+/* =====================================================
    EXPORTAR VENTAS
-========================= */
+   ===================================================== */
 
 function exportCSV(){
 
-let a=[
+  let a = [
 
-[
-'Fecha',
-'Cliente',
-'Cantidad',
-'Precio',
-'Total',
-'Pago'
-],
+    [
+      'Fecha',
+      'Cliente',
+      'Cantidad',
+      'Precio',
+      'Total',
+      'Pago'
+    ],
 
-...localDb.sales.map(s=>[
+    ...localDb.sales.map(
+      s => [
 
-s.date,
+        s.date,
 
-clientName(s.clientId),
+        clientName(
+          s.clientId
+        ),
 
-s.qty,
+        s.qty,
 
-s.price,
+        s.price,
 
-s.total,
+        s.total,
 
-s.pay
+        s.pay
 
-])
+      ]
+    )
 
-];
+  ];
 
 
-let blob=
-new Blob(
-[
-a.map(r=>r.join(';')).join('\n')
-],
-{
-type:'text/csv'
+  let blob =
+  new Blob(
+
+    [
+      a.map(
+        r =>
+        r.join(';')
+      )
+      .join('\n')
+    ],
+
+    {
+      type:'text/csv'
+    }
+
+  );
+
+
+  let u =
+  URL.createObjectURL(
+    blob
+  );
+
+
+  let x =
+  document.createElement(
+    'a'
+  );
+
+
+  x.href = u;
+
+
+  x.download =
+  'ventas_agua_del_bosque.csv';
+
+
+  x.click();
+
+
+  URL.revokeObjectURL(u);
+
 }
-);
 
 
-let u=
-URL.createObjectURL(blob);
-
-let x=
-document.createElement('a');
-
-x.href=u;
-
-x.download=
-'ventas_agua_del_bosque.csv';
-
-x.click();
-
-URL.revokeObjectURL(u);
-
-}
-
-
-/* =========================
-   BORRAR SOLO DATOS LOCALES
-========================= */
+/* =====================================================
+   BORRAR DATOS LOCALES
+   ===================================================== */
 
 function resetDemo(){
 
-if(
-confirm(
-'¿Borrar ventas y producción guardadas localmente? Los clientes de Supabase NO serán eliminados.'
-)
-){
+  if(
+    confirm(
+      '¿Borrar ventas y producción guardadas localmente? Los clientes de Supabase NO serán eliminados.'
+    )
+  ){
 
-localStorage.removeItem(KEY);
+    localStorage.removeItem(KEY);
 
-localDb={
-clients:[],
-sales:[],
-production:[]
-};
 
-render();
+    localDb = {
+
+      clients:[],
+
+      sales:[],
+
+      production:[]
+
+    };
+
+
+    render();
+
+  }
 
 }
 
-}
 
-
-/* =========================
+/* =====================================================
    INICIO
-========================= */
+   ===================================================== */
 
 checkSession();
 
 
 supabaseClient.auth.onAuthStateChange(
-(event,session)=>{
+  (event,session) => {
 
-if(session){
+    if(session){
 
-showApplication(
-session.user
+      showApplication(
+        session.user
+      );
+
+    }
+
+  }
 );
 
-}
 
-}
-);
+if(
+  'serviceWorker' in navigator
+){
 
-
-if('serviceWorker' in navigator){
-
-navigator.serviceWorker.register(
-'sw.js'
-);
+  navigator
+  .serviceWorker
+  .register(
+    'sw.js'
+  );
 
 }
 
