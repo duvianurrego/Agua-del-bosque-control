@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Agua del Bosque Control 4.0</title>
 
+<!-- MAPA LEAFLET -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
 <style>
 *{box-sizing:border-box}
 :root{
@@ -84,11 +87,9 @@ button{cursor:pointer}
  color:#fff;
  padding:22px 14px;
  position:fixed;
- top:0;
- left:0;
- bottom:0;
+ top:0;left:0;bottom:0;
  overflow-y:auto;
- z-index:20
+ z-index:1001
 }
 .brand{
  padding:4px 10px 22px;
@@ -106,8 +107,7 @@ button{cursor:pointer}
  padding:12px 13px;
  margin:3px 0;
  border-radius:11px;
- font-weight:600;
- transition:.2s
+ font-weight:600
 }
 .menuBtn:hover,.menuBtn.active{
  background:rgba(255,255,255,.15);
@@ -150,7 +150,7 @@ button{cursor:pointer}
  padding:0 28px;
  position:sticky;
  top:0;
- z-index:10
+ z-index:900
 }
 .welcome{font-size:20px;font-weight:800}
 .dateText{color:var(--muted);font-size:13px;margin-top:4px}
@@ -220,7 +220,7 @@ button{cursor:pointer}
 }
 .progressInner{
  height:100%;
- width:0%;
+ width:0;
  background:linear-gradient(90deg,var(--green),var(--green2));
  border-radius:20px;
  transition:width .4s
@@ -315,22 +315,10 @@ input,select{
  color:#fff;
  font-weight:800
 }
-.gpsBtn:disabled{
- opacity:.65;
- cursor:not-allowed
-}
-.gpsStatus{
- font-size:13px;
- color:var(--muted)
-}
-.gpsSuccess{
- color:#087b5c;
- font-weight:700
-}
-.gpsError{
- color:#c94b4b;
- font-weight:700
-}
+.gpsBtn:disabled{opacity:.65;cursor:not-allowed}
+.gpsStatus{font-size:13px;color:var(--muted)}
+.gpsSuccess{color:#087b5c;font-weight:700}
+.gpsError{color:#c94b4b;font-weight:700}
 
 /* TABLE */
 .tableWrap{
@@ -384,7 +372,7 @@ td{font-size:14px}
  font-size:11px
 }
 
-/* ROUTES */
+/* RUTAS */
 .routeHero{
  background:linear-gradient(135deg,#063b5c,#087b5c);
  color:#fff;
@@ -395,6 +383,119 @@ td{font-size:14px}
 }
 .routeHero h3{margin:0 0 7px}
 .routeHero p{margin:0;opacity:.85}
+
+.mapStats{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:12px;
+ margin-bottom:15px
+}
+.mapMiniStat{
+ background:#fff;
+ border:1px solid var(--border);
+ border-radius:13px;
+ padding:13px 15px;
+ box-shadow:var(--shadow)
+}
+.mapMiniLabel{
+ font-size:11px;
+ color:var(--muted);
+ text-transform:uppercase
+}
+.mapMiniValue{
+ font-size:20px;
+ font-weight:800;
+ margin-top:4px
+}
+
+/* MAPA REAL */
+.realMapCard{
+ background:#fff;
+ border:1px solid var(--border);
+ border-radius:18px;
+ padding:12px;
+ box-shadow:var(--shadow);
+ margin-bottom:18px
+}
+#realMap{
+ width:100%;
+ height:520px;
+ border-radius:14px;
+ overflow:hidden;
+ background:#e7efed
+}
+.mapLegend{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:12px;
+ flex-wrap:wrap;
+ padding:10px 5px 1px
+}
+.mapLegendText{
+ color:var(--muted);
+ font-size:12px
+}
+.centerMapBtn{
+ border:0;
+ background:#edf7f3;
+ color:var(--green);
+ font-weight:800;
+ border-radius:9px;
+ padding:8px 11px
+}
+
+/* MARCADOR PERSONALIZADO */
+.clientMarker{
+ width:34px;
+ height:34px;
+ background:#087b5c;
+ border:3px solid #fff;
+ border-radius:50% 50% 50% 0;
+ transform:rotate(-45deg);
+ box-shadow:0 3px 10px rgba(0,0,0,.30);
+ display:flex;
+ align-items:center;
+ justify-content:center
+}
+.clientMarker span{
+ transform:rotate(45deg);
+ color:#fff;
+ font-size:15px
+}
+
+.popupClient{
+ min-width:190px;
+ line-height:1.4
+}
+.popupClientName{
+ font-size:15px;
+ font-weight:800;
+ color:#17343c;
+ margin-bottom:4px
+}
+.popupAddress{
+ font-size:12px;
+ color:#6b7d82;
+ margin-bottom:9px
+}
+.popupGps{
+ font-size:11px;
+ color:#087b5c;
+ font-weight:700;
+ margin-bottom:9px
+}
+.popupNavigate{
+ display:block;
+ text-align:center;
+ text-decoration:none;
+ background:#087b5c;
+ color:#fff !important;
+ padding:8px 10px;
+ border-radius:8px;
+ font-weight:700
+}
+
 .routeCard{
  display:flex;
  justify-content:space-between;
@@ -410,53 +511,6 @@ td{font-size:14px}
  color:var(--muted);
  font-size:13px;
  margin-top:4px
-}
-
-/* VISUAL MAP */
-.map{
- height:280px;
- border-radius:17px;
- background:
- radial-gradient(circle at 20% 30%,rgba(8,123,92,.15),transparent 15%),
- radial-gradient(circle at 75% 65%,rgba(6,59,92,.15),transparent 18%),
- linear-gradient(#e6f5ec,#dceef4);
- position:relative;
- overflow:hidden;
- border:1px solid var(--border);
- margin-bottom:17px
-}
-.map::before{
- content:"";
- position:absolute;
- left:-5%;
- top:45%;
- width:110%;
- height:10px;
- background:rgba(255,255,255,.8);
- transform:rotate(-8deg)
-}
-.map::after{
- content:"";
- position:absolute;
- left:45%;
- top:-10%;
- width:9px;
- height:120%;
- background:rgba(255,255,255,.75);
- transform:rotate(15deg)
-}
-.pin{
- position:absolute;
- background:var(--green);
- color:#fff;
- padding:7px 9px;
- border-radius:12px;
- font-size:12px;
- z-index:2;
- max-width:160px;
- overflow:hidden;
- text-overflow:ellipsis;
- white-space:nowrap
 }
 
 .moduleComing{text-align:center;padding:45px 20px}
@@ -485,9 +539,13 @@ td{font-size:14px}
   flex-direction:column
  }
  .gpsBtn{width:100%}
+ .mapStats{grid-template-columns:1fr 1fr}
+ #realMap{height:460px}
 }
 @media(max-width:430px){
  .statsGrid{grid-template-columns:1fr}
+ .mapStats{grid-template-columns:1fr}
+ #realMap{height:420px}
 }
 </style>
 </head>
@@ -661,20 +719,15 @@ td{font-size:14px}
 <section id="clientes" class="panel">
 
  <h1 class="sectionTitle">Clientes</h1>
- <p class="sectionSub">
-  Registre una sola vez los datos y la ubicación GPS del cliente.
- </p>
+ <p class="sectionSub">Registre una sola vez los datos y la ubicación GPS del cliente.</p>
 
  <div class="formCard">
 
   <div class="cardTitle">➕ Nuevo cliente</div>
 
   <div class="formGrid">
-
    <input id="cname" placeholder="Nombre / negocio">
-
    <input id="cphone" placeholder="Celular">
-
    <input id="caddress" placeholder="Dirección / sector">
 
    <select id="ctype">
@@ -686,11 +739,9 @@ td{font-size:14px}
     <option>Gimnasio</option>
     <option>Distribuidor</option>
    </select>
-
   </div>
 
   <div class="gpsBox">
-
    <div class="gpsRow">
 
     <button
@@ -706,7 +757,6 @@ td{font-size:14px}
     </div>
 
    </div>
-
   </div>
 
   <button
@@ -769,6 +819,7 @@ td{font-size:14px}
 
 <!-- PEDIDOS -->
 <section id="pedidos" class="panel">
+
  <h1 class="sectionTitle">Pedidos</h1>
  <p class="sectionSub">Próximo módulo operativo.</p>
 
@@ -777,6 +828,7 @@ td{font-size:14px}
   <h3>Gestión de pedidos</h3>
   <p>Aquí controlaremos pedidos pendientes, en ruta y entregados.</p>
  </div>
+
 </section>
 
 <!-- RUTAS -->
@@ -785,21 +837,59 @@ td{font-size:14px}
  <h1 class="sectionTitle">Rutas y ubicaciones</h1>
 
  <p class="sectionSub">
-  Los clientes con GPS registrado pueden abrirse directamente por coordenadas.
+  Vista geográfica de los clientes de Agua del Bosque.
  </p>
 
  <div class="routeHero">
-  <h3>🗺️ Agua del Bosque · Villavicencio</h3>
+  <h3>🗺️ Mapa comercial · Villavicencio</h3>
   <p>
-   El GPS guardado tendrá prioridad sobre la dirección escrita para navegar.
+   Los clientes con ubicación GPS aparecerán automáticamente sobre el mapa.
   </p>
  </div>
 
- <div class="map" id="map"></div>
+ <div class="mapStats">
+
+  <div class="mapMiniStat">
+   <div class="mapMiniLabel">Clientes</div>
+   <div class="mapMiniValue" id="mapTotalClients">0</div>
+  </div>
+
+  <div class="mapMiniStat">
+   <div class="mapMiniLabel">Con GPS</div>
+   <div class="mapMiniValue" id="mapGpsClients">0</div>
+  </div>
+
+  <div class="mapMiniStat">
+   <div class="mapMiniLabel">Pendientes GPS</div>
+   <div class="mapMiniValue" id="mapPendingClients">0</div>
+  </div>
+
+ </div>
+
+ <div class="realMapCard">
+
+  <div id="realMap"></div>
+
+  <div class="mapLegend">
+
+   <div class="mapLegendText">
+    📍 Cada marcador representa un cliente con ubicación GPS guardada.
+   </div>
+
+   <button class="centerMapBtn" onclick="centerMapVillavicencio()">
+    🎯 Centrar Villavicencio
+   </button>
+
+  </div>
+
+ </div>
 
  <div class="card">
-  <div class="cardTitle">📍 Clientes registrados</div>
+
+  <div class="cardTitle">📍 Directorio de ubicaciones</div>
+
   <div id="routeList"></div>
+
  </div>
 
 </section>
@@ -909,14 +999,21 @@ td{font-size:14px}
 </div>
 </div>
 
+<!-- SUPABASE -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- LEAFLET -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
 
 const SUPABASE_URL='https://cxzmhuydzxevlztkjbwz.supabase.co';
-const SUPABASE_PUBLISHABLE_KEY='sb_publishable_phdZAar5r0HiPxMYX_YWng_pu9kl0k3';
 
-const supabaseClient=window.supabase.createClient(
+const SUPABASE_PUBLISHABLE_KEY=
+'sb_publishable_phdZAar5r0HiPxMYX_YWng_pu9kl0k3';
+
+const supabaseClient=
+window.supabase.createClient(
  SUPABASE_URL,
  SUPABASE_PUBLISHABLE_KEY
 );
@@ -924,7 +1021,8 @@ const supabaseClient=window.supabase.createClient(
 const KEY='adb_control_v2';
 
 let localDb=JSON.parse(
- localStorage.getItem(KEY) || '{"production":[]}'
+ localStorage.getItem(KEY) ||
+ '{"production":[]}'
 );
 
 if(!Array.isArray(localDb.production)){
@@ -934,22 +1032,33 @@ if(!Array.isArray(localDb.production)){
 let clients=[];
 let sales=[];
 
-/* UBICACION TEMPORAL DEL NUEVO CLIENTE */
 let capturedLatitude=null;
 let capturedLongitude=null;
 let capturedAccuracy=null;
 
-const money=n=>new Intl.NumberFormat('es-CO',{
+/* MAPA */
+let realMap=null;
+let clientMarkersLayer=null;
+
+/* CENTRO APROXIMADO DE VILLAVICENCIO */
+const VILLAVICENCIO_LAT=4.142;
+const VILLAVICENCIO_LNG=-73.626;
+const VILLAVICENCIO_ZOOM=13;
+
+const money=n=>
+new Intl.NumberFormat('es-CO',{
  style:'currency',
  currency:'COP',
  maximumFractionDigits:0
 }).format(Number(n)||0);
 
 function today(s){
- return new Date(s).toDateString()===new Date().toDateString();
+ return new Date(s).toDateString()===
+ new Date().toDateString();
 }
 
 function escapeHtml(value){
+
  return String(value??'')
  .replaceAll('&','&amp;')
  .replaceAll('<','&lt;')
@@ -1003,46 +1112,64 @@ function resetCapturedLocation(){
  const status=document.getElementById('gpsStatus');
 
  if(status){
+
   status.className='gpsStatus';
-  status.textContent='Ubicación todavía no capturada.';
+
+  status.textContent=
+  'Ubicación todavía no capturada.';
  }
 }
 
 function captureLocation(){
 
- const button=document.getElementById('captureGpsBtn');
- const status=document.getElementById('gpsStatus');
+ const button=
+ document.getElementById('captureGpsBtn');
+
+ const status=
+ document.getElementById('gpsStatus');
 
  if(!navigator.geolocation){
 
   status.className='gpsStatus gpsError';
 
   status.textContent=
-  'Este dispositivo o navegador no permite obtener la ubicación.';
+  'Este dispositivo no permite obtener la ubicación.';
 
   return;
  }
 
  button.disabled=true;
- button.textContent='📡 Obteniendo ubicación...';
+
+ button.textContent=
+ '📡 Obteniendo ubicación...';
 
  status.className='gpsStatus';
 
  status.textContent=
- 'Permita el acceso a la ubicación cuando el celular lo solicite.';
+ 'Permita el acceso a la ubicación cuando el dispositivo lo solicite.';
 
  navigator.geolocation.getCurrentPosition(
 
   position=>{
 
-   capturedLatitude=position.coords.latitude;
-   capturedLongitude=position.coords.longitude;
-   capturedAccuracy=Math.round(position.coords.accuracy||0);
+   capturedLatitude=
+   position.coords.latitude;
+
+   capturedLongitude=
+   position.coords.longitude;
+
+   capturedAccuracy=
+   Math.round(
+    position.coords.accuracy||0
+   );
 
    button.disabled=false;
-   button.textContent='📍 Actualizar ubicación';
 
-   status.className='gpsStatus gpsSuccess';
+   button.textContent=
+   '📍 Actualizar ubicación';
+
+   status.className=
+   'gpsStatus gpsSuccess';
 
    if(capturedAccuracy){
 
@@ -1061,19 +1188,22 @@ function captureLocation(){
   error=>{
 
    button.disabled=false;
-   button.textContent='📍 Capturar ubicación actual';
 
-   status.className='gpsStatus gpsError';
+   button.textContent=
+   '📍 Capturar ubicación actual';
+
+   status.className=
+   'gpsStatus gpsError';
 
    if(error.code===1){
 
     status.textContent=
-    'No se autorizó el acceso a la ubicación. Active el permiso de ubicación para esta página.';
+    'No se autorizó el acceso a la ubicación.';
 
    }else if(error.code===2){
 
     status.textContent=
-    'No fue posible determinar la ubicación. Revise que el GPS esté activado.';
+    'No fue posible determinar la ubicación. Revise el GPS.';
 
    }else if(error.code===3){
 
@@ -1101,22 +1231,22 @@ function captureLocation(){
 
 function hasGps(client){
 
- return Number.isFinite(Number(client.lat)) &&
-        Number.isFinite(Number(client.lng)) &&
-        client.lat!==null &&
-        client.lng!==null;
+ return client.lat!==null &&
+ client.lng!==null &&
+ Number.isFinite(Number(client.lat)) &&
+ Number.isFinite(Number(client.lng));
 }
 
 function getMapsUrl(client){
 
  if(hasGps(client)){
 
-  const query=
+  const destination=
   Number(client.lat)+','+
   Number(client.lng);
 
-  return 'https://www.google.com/maps/search/?api=1&query='+
-  encodeURIComponent(query);
+  return 'https://www.google.com/maps/dir/?api=1&destination='+
+  encodeURIComponent(destination);
  }
 
  const address=
@@ -1126,12 +1256,12 @@ function getMapsUrl(client){
   return '';
  }
 
- const query=
+ const destination=
  address+
  ', Villavicencio, Meta, Colombia';
 
- return 'https://www.google.com/maps/search/?api=1&query='+
- encodeURIComponent(query);
+ return 'https://www.google.com/maps/dir/?api=1&destination='+
+ encodeURIComponent(destination);
 }
 
 function openMapsByClientId(id){
@@ -1144,6 +1274,7 @@ function openMapsByClientId(id){
  if(!client){
 
   alert('No se encontró el cliente.');
+
   return;
  }
 
@@ -1166,30 +1297,223 @@ function openMapsByClientId(id){
 }
 
 /* =========================
+   MAPA REAL
+========================= */
+
+function initializeRealMap(){
+
+ if(realMap){
+
+  setTimeout(()=>{
+   realMap.invalidateSize();
+  },100);
+
+  return;
+ }
+
+ const mapElement=
+ document.getElementById('realMap');
+
+ if(!mapElement){
+  return;
+ }
+
+ realMap=L.map(
+  'realMap',
+  {
+   zoomControl:true
+  }
+ ).setView(
+  [
+   VILLAVICENCIO_LAT,
+   VILLAVICENCIO_LNG
+  ],
+  VILLAVICENCIO_ZOOM
+ );
+
+ L.tileLayer(
+  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  {
+   maxZoom:19,
+   attribution:
+   '&copy; OpenStreetMap contributors'
+  }
+ ).addTo(realMap);
+
+ clientMarkersLayer=
+ L.layerGroup().addTo(realMap);
+
+ updateMapMarkers();
+
+ setTimeout(()=>{
+  realMap.invalidateSize();
+ },250);
+}
+
+function createClientIcon(){
+
+ return L.divIcon({
+
+  className:'',
+
+  html:
+  '<div class="clientMarker">'+
+   '<span>💧</span>'+
+  '</div>',
+
+  iconSize:[34,34],
+
+  iconAnchor:[17,34],
+
+  popupAnchor:[0,-32]
+ });
+}
+
+function updateMapMarkers(){
+
+ if(!realMap || !clientMarkersLayer){
+  return;
+ }
+
+ clientMarkersLayer.clearLayers();
+
+ const gpsClients=
+ clients.filter(hasGps);
+
+ gpsClients.forEach(client=>{
+
+  const navigationUrl=
+  getMapsUrl(client);
+
+  const popup=`
+
+   <div class="popupClient">
+
+    <div class="popupClientName">
+     💧 ${escapeHtml(client.name)}
+    </div>
+
+    <div class="popupAddress">
+     ${
+      client.address
+      ?
+      escapeHtml(client.address)
+      :
+      'Sin dirección escrita'
+     }
+    </div>
+
+    <div class="popupGps">
+     📍 Ubicación GPS registrada
+    </div>
+
+    <a
+     class="popupNavigate"
+     href="${escapeHtml(navigationUrl)}"
+     target="_blank"
+     rel="noopener noreferrer">
+     🧭 Navegar hasta aquí
+    </a>
+
+   </div>
+  `;
+
+  L.marker(
+   [
+    Number(client.lat),
+    Number(client.lng)
+   ],
+   {
+    icon:createClientIcon()
+   }
+  )
+  .addTo(clientMarkersLayer)
+  .bindPopup(popup);
+ });
+
+ /*
+  Si existen clientes GPS,
+  ajustamos el mapa para mostrarlos.
+ */
+
+ if(gpsClients.length>0){
+
+  const bounds=
+  L.latLngBounds(
+   gpsClients.map(c=>[
+    Number(c.lat),
+    Number(c.lng)
+   ])
+  );
+
+  if(gpsClients.length===1){
+
+   realMap.setView(
+    [
+     Number(gpsClients[0].lat),
+     Number(gpsClients[0].lng)
+    ],
+    16
+   );
+
+  }else{
+
+   realMap.fitBounds(
+    bounds,
+    {
+     padding:[40,40],
+     maxZoom:16
+    }
+   );
+  }
+ }
+}
+
+function centerMapVillavicencio(){
+
+ if(!realMap){
+  return;
+ }
+
+ realMap.setView(
+  [
+   VILLAVICENCIO_LAT,
+   VILLAVICENCIO_LNG
+  ],
+  VILLAVICENCIO_ZOOM
+ );
+}
+
+/* =========================
    LOGIN
 ========================= */
 
 async function login(){
 
  const email=
- document.getElementById('loginEmail').value.trim();
+ document.getElementById('loginEmail')
+ .value.trim();
 
  const password=
- document.getElementById('loginPassword').value;
+ document.getElementById('loginPassword')
+ .value;
 
  const message=
  document.getElementById('loginMessage');
 
  if(!email || !password){
 
-  message.textContent='Ingrese correo y contraseña.';
+  message.textContent=
+  'Ingrese correo y contraseña.';
+
   return;
  }
 
  message.textContent='Ingresando...';
 
  const {data,error}=
- await supabaseClient.auth.signInWithPassword({
+ await supabaseClient.auth
+ .signInWithPassword({
   email,
   password
  });
@@ -1213,25 +1537,32 @@ async function logout(){
 
  await supabaseClient.auth.signOut();
 
- document.getElementById('app').style.display='none';
+ document.getElementById('app')
+ .style.display='none';
 
- document.getElementById('loginScreen').style.display='flex';
+ document.getElementById('loginScreen')
+ .style.display='flex';
 
- document.getElementById('loginPassword').value='';
+ document.getElementById('loginPassword')
+ .value='';
 }
 
 async function showApplication(user){
 
- document.getElementById('loginScreen').style.display='none';
+ document.getElementById('loginScreen')
+ .style.display='none';
 
- document.getElementById('app').style.display='block';
+ document.getElementById('app')
+ .style.display='block';
 
- document.getElementById('currentUser').textContent=
+ document.getElementById('currentUser')
+ .textContent=
  user?.email || 'Usuario autorizado';
 
  setDate();
 
  await loadClients();
+
  await loadSales();
 
  render();
@@ -1239,27 +1570,36 @@ async function showApplication(user){
 
 async function checkSession(){
 
- const {data}=await supabaseClient.auth.getSession();
+ const {data}=
+ await supabaseClient.auth.getSession();
 
  if(data.session){
 
-  await showApplication(data.session.user);
+  await showApplication(
+   data.session.user
+  );
 
  }else{
 
-  document.getElementById('loginScreen').style.display='flex';
+  document.getElementById('loginScreen')
+  .style.display='flex';
 
-  document.getElementById('app').style.display='none';
+  document.getElementById('app')
+  .style.display='none';
  }
 }
 
-document.getElementById('loginPassword')
-.addEventListener('keydown',e=>{
+document
+.getElementById('loginPassword')
+.addEventListener(
+ 'keydown',
+ e=>{
 
- if(e.key==='Enter'){
-  login();
+  if(e.key==='Enter'){
+   login();
+  }
  }
-});
+);
 
 /* =========================
    CLIENTES
@@ -1267,16 +1607,22 @@ document.getElementById('loginPassword')
 
 async function loadClients(){
 
- const {data,error}=await supabaseClient
+ const {data,error}=
+ await supabaseClient
  .from('clientes')
  .select('*')
- .order('created_at',{ascending:false});
+ .order(
+  'created_at',
+  {ascending:false}
+ );
 
  if(error){
 
   console.error(error);
 
-  alert('No fue posible cargar los clientes.');
+  alert(
+   'No fue posible cargar los clientes.'
+  );
 
   return;
  }
@@ -1312,16 +1658,20 @@ async function loadClients(){
 async function addClient(){
 
  const name=
- document.getElementById('cname').value.trim();
+ document.getElementById('cname')
+ .value.trim();
 
  const phone=
- document.getElementById('cphone').value.trim();
+ document.getElementById('cphone')
+ .value.trim();
 
  const address=
- document.getElementById('caddress').value.trim();
+ document.getElementById('caddress')
+ .value.trim();
 
  const type=
- document.getElementById('ctype').value;
+ document.getElementById('ctype')
+ .value;
 
  const button=
  document.getElementById('saveClientBtn');
@@ -1329,16 +1679,14 @@ async function addClient(){
  if(!name){
 
   alert('Ingrese el nombre.');
+
   return;
  }
 
- /*
-  La ubicación NO será obligatoria todavía.
-  Esto permite registrar un cliente incluso si el GPS falla.
- */
-
  button.disabled=true;
- button.textContent='Guardando cliente...';
+
+ button.textContent=
+ 'Guardando cliente...';
 
  const newClient={
 
@@ -1361,14 +1709,17 @@ async function addClient(){
   longitud:capturedLongitude
  };
 
- const {data,error}=await supabaseClient
+ const {data,error}=
+ await supabaseClient
  .from('clientes')
  .insert(newClient)
  .select()
  .single();
 
  button.disabled=false;
- button.textContent='Guardar cliente';
+
+ button.textContent=
+ 'Guardar cliente';
 
  if(error){
 
@@ -1384,19 +1735,25 @@ async function addClient(){
  if(!data || !data.id){
 
   alert(
-   'Supabase no confirmó el registro del cliente. No lo dé por guardado.'
+   'Supabase no confirmó el registro del cliente.'
   );
 
   return;
  }
 
- document.getElementById('cname').value='';
- document.getElementById('cphone').value='';
- document.getElementById('caddress').value='';
+ document.getElementById('cname')
+ .value='';
+
+ document.getElementById('cphone')
+ .value='';
+
+ document.getElementById('caddress')
+ .value='';
 
  resetCapturedLocation();
 
- document.getElementById('captureGpsBtn').textContent=
+ document.getElementById('captureGpsBtn')
+ .textContent=
  '📍 Capturar ubicación actual';
 
  await loadClients();
@@ -1426,10 +1783,14 @@ async function addClient(){
 
 async function loadSales(){
 
- const {data,error}=await supabaseClient
+ const {data,error}=
+ await supabaseClient
  .from('ventas')
  .select('*')
- .order('created_at',{ascending:false});
+ .order(
+  'created_at',
+  {ascending:false}
+ );
 
  if(error){
 
@@ -1437,7 +1798,9 @@ async function loadSales(){
 
   sales=[];
 
-  alert('No fue posible cargar las ventas.');
+  alert(
+   'No fue posible cargar las ventas.'
+  );
 
   return;
  }
@@ -1446,77 +1809,117 @@ async function loadSales(){
 
   id:Number(row.id),
 
-  clientId:Number(row.cliente_id),
+  clientId:
+  Number(row.cliente_id),
 
-  qty:Number(row.cantidad)||0,
+  qty:
+  Number(row.cantidad)||0,
 
-  price:Number(row.precio_unitario)||0,
+  price:
+  Number(row.precio_unitario)||0,
 
-  total:Number(row.total)||0,
+  total:
+  Number(row.total)||0,
 
-  pay:row.metodo_pago||'',
+  pay:
+  row.metodo_pago||'',
 
-  empties:Number(row.envases_recuperados)||0,
+  empties:
+  Number(row.envases_recuperados)||0,
 
-  notes:row.observaciones||'',
+  notes:
+  row.observaciones||'',
 
-  date:row.created_at
+  date:
+  row.created_at
  }));
 }
 
 async function addSale(){
 
  const clientId=
- Number(document.getElementById('vclient').value);
+ Number(
+  document.getElementById('vclient')
+  .value
+ );
 
  const qty=
- Number(document.getElementById('vqty').value);
+ Number(
+  document.getElementById('vqty')
+  .value
+ );
 
  const price=
- Number(document.getElementById('vprice').value);
+ Number(
+  document.getElementById('vprice')
+  .value
+ );
 
  const pay=
- document.getElementById('vpay').value;
+ document.getElementById('vpay')
+ .value;
 
  const empties=
- Number(document.getElementById('vempties').value)||0;
+ Number(
+  document.getElementById('vempties')
+  .value
+ )||0;
 
  const notes=
- document.getElementById('vnotes').value.trim();
+ document.getElementById('vnotes')
+ .value.trim();
 
  const button=
  document.getElementById('saveSaleBtn');
 
  if(!clientId){
 
-  alert('Seleccione un cliente.');
+  alert(
+   'Seleccione un cliente.'
+  );
+
   return;
  }
 
  if(!Number.isInteger(qty) || qty<=0){
 
-  alert('Ingrese una cantidad válida.');
+  alert(
+   'Ingrese una cantidad válida.'
+  );
+
   return;
  }
 
  if(!Number.isFinite(price) || price<=0){
 
-  alert('Ingrese un precio válido.');
+  alert(
+   'Ingrese un precio válido.'
+  );
+
   return;
  }
 
- if(!Number.isInteger(empties) || empties<0){
+ if(
+  !Number.isInteger(empties) ||
+  empties<0
+ ){
 
-  alert('Revise los envases recuperados.');
+  alert(
+   'Revise los envases recuperados.'
+  );
+
   return;
  }
 
  const total=qty*price;
 
  button.disabled=true;
- button.textContent='Guardando venta...';
 
- const {data,error}=await supabaseClient
+ button.textContent=
+ 'Guardando venta...';
+
+ const {data,error}=
+ await supabaseClient
  .from('ventas')
  .insert({
 
@@ -1532,14 +1935,17 @@ async function addSale(){
 
   envases_recuperados:empties,
 
-  observaciones:notes||null
+  observaciones:
+  notes||null
 
  })
  .select()
  .single();
 
  button.disabled=false;
- button.textContent='Registrar venta';
+
+ button.textContent=
+ 'Registrar venta';
 
  if(error){
 
@@ -1555,7 +1961,7 @@ async function addSale(){
  if(!data || !data.id){
 
   alert(
-   'Supabase no confirmó la venta. No la dé por registrada.'
+   'Supabase no confirmó la venta.'
   );
 
   return;
@@ -1563,11 +1969,14 @@ async function addSale(){
 
  await loadSales();
 
- document.getElementById('vqty').value='1';
+ document.getElementById('vqty')
+ .value='1';
 
- document.getElementById('vempties').value='0';
+ document.getElementById('vempties')
+ .value='0';
 
- document.getElementById('vnotes').value='';
+ document.getElementById('vnotes')
+ .value='';
 
  render();
 
@@ -1593,14 +2002,23 @@ function saveLocal(){
 function addProduction(){
 
  const qty=
- Number(document.getElementById('pqty').value);
+ Number(
+  document.getElementById('pqty')
+  .value
+ );
 
  const reject=
- Number(document.getElementById('preject').value)||0;
+ Number(
+  document.getElementById('preject')
+  .value
+ )||0;
 
  if(!qty || qty<=0){
 
-  alert('Ingrese una cantidad válida.');
+  alert(
+   'Ingrese una cantidad válida.'
+  );
+
   return;
  }
 
@@ -1612,12 +2030,15 @@ function addProduction(){
 
   reject:reject,
 
-  date:new Date().toISOString()
+  date:
+  new Date().toISOString()
  });
 
- document.getElementById('pqty').value='';
+ document.getElementById('pqty')
+ .value='';
 
- document.getElementById('preject').value='0';
+ document.getElementById('preject')
+ .value='0';
 
  saveLocal();
 }
@@ -1629,13 +2050,17 @@ function addProduction(){
 function show(id,button){
 
  document.querySelectorAll('.panel')
- .forEach(x=>x.classList.remove('active'));
+ .forEach(
+  x=>x.classList.remove('active')
+ );
 
  document.getElementById(id)
  .classList.add('active');
 
  document.querySelectorAll('.menuBtn')
- .forEach(x=>x.classList.remove('active'));
+ .forEach(
+  x=>x.classList.remove('active')
+ );
 
  if(button){
   button.classList.add('active');
@@ -1648,6 +2073,27 @@ function show(id,button){
  }
 
  render();
+
+ /*
+  Leaflet necesita recalcular su tamaño
+  cuando el panel deja de estar oculto.
+ */
+
+ if(id==='rutas'){
+
+  setTimeout(()=>{
+
+   initializeRealMap();
+
+   if(realMap){
+
+    realMap.invalidateSize();
+
+    updateMapMarkers();
+   }
+
+  },150);
+ }
 }
 
 function openPanel(id){
@@ -1680,7 +2126,9 @@ function clientName(id){
 function render(){
 
  const todaySales=
- sales.filter(x=>today(x.date));
+ sales.filter(
+  x=>today(x.date)
+ );
 
  const units=
  todaySales.reduce(
@@ -1696,38 +2144,49 @@ function render(){
 
  const debt=
  todaySales
- .filter(x=>x.pay==='Crédito')
+ .filter(
+  x=>x.pay==='Crédito'
+ )
  .reduce(
   (a,b)=>a+b.total,
   0
  );
 
- document.getElementById('kUnits').textContent=units;
+ document.getElementById('kUnits')
+ .textContent=units;
 
- document.getElementById('kSales').textContent=
+ document.getElementById('kSales')
+ .textContent=
  money(salesValue);
 
- document.getElementById('kClients').textContent=
+ document.getElementById('kClients')
+ .textContent=
  clients.length;
 
- document.getElementById('kDebt').textContent=
+ document.getElementById('kDebt')
+ .textContent=
  money(debt);
 
- document.getElementById('debtTotal').textContent=
+ document.getElementById('debtTotal')
+ .textContent=
  money(debt);
 
  const percent=
  Math.min(
   100,
-  Math.round((units/500)*100)
+  Math.round(
+   (units/500)*100
+  )
  );
 
  document.getElementById('goalProgress')
- .style.width=percent+'%';
+ .style.width=
+ percent+'%';
 
  document.getElementById('goalText')
  .textContent=
- units+' de 500 garrafones';
+ units+
+ ' de 500 garrafones';
 
  document.getElementById('goalPercent')
  .textContent=
@@ -1739,9 +2198,13 @@ function render(){
  .innerHTML=
  todaySales.length
  ?
- todaySales.slice(0,5).map(s=>`
+ todaySales
+ .slice(0,5)
+ .map(s=>`
 
-  <div style="padding:9px 0;border-bottom:1px solid #edf1f0">
+  <div style="
+   padding:9px 0;
+   border-bottom:1px solid #edf1f0">
 
    <span class="badge">
     ${escapeHtml(s.pay)}
@@ -1802,7 +2265,9 @@ function render(){
      <tr>
 
       <td>
-       <b>${escapeHtml(c.name)}</b>
+       <b>
+        ${escapeHtml(c.name)}
+       </b>
       </td>
 
       <td>
@@ -1853,8 +2318,13 @@ function render(){
      <tr>
       <td
        colspan="6"
-       style="text-align:center;color:#6b7d82;padding:30px">
+       style="
+        text-align:center;
+        color:#6b7d82;
+        padding:30px">
+
        No hay clientes registrados.
+
       </td>
      </tr>
     `
@@ -1865,13 +2335,18 @@ function render(){
  </table>
  `;
 
- document.querySelectorAll('[data-map-client]')
+ document
+ .querySelectorAll(
+  '[data-map-client]'
+ )
  .forEach(button=>{
 
   button.onclick=()=>{
 
    openMapsByClientId(
-    Number(button.dataset.mapClient)
+    Number(
+     button.dataset.mapClient
+    )
    );
   };
  });
@@ -1879,7 +2354,8 @@ function render(){
  /* VENTAS */
 
  document.getElementById('salesTable')
- .innerHTML=table(
+ .innerHTML=
+ table(
 
   [
    'Fecha',
@@ -1893,7 +2369,8 @@ function render(){
 
   sales.map(s=>[
 
-   new Date(s.date).toLocaleString('es-CO'),
+   new Date(s.date)
+   .toLocaleString('es-CO'),
 
    clientName(s.clientId),
 
@@ -1912,7 +2389,8 @@ function render(){
  /* PRODUCCION */
 
  document.getElementById('prodTable')
- .innerHTML=table(
+ .innerHTML=
+ table(
 
   [
    'Fecha',
@@ -1925,7 +2403,8 @@ function render(){
   .reverse()
   .map(p=>[
 
-   new Date(p.date).toLocaleString('es-CO'),
+   new Date(p.date)
+   .toLocaleString('es-CO'),
 
    p.qty,
 
@@ -1955,52 +2434,41 @@ function render(){
 
  document.getElementById('iFull')
  .textContent=
- Math.max(0,allProd-allSold);
+ Math.max(
+  0,
+  allProd-allSold
+ );
 
  document.getElementById('iSold')
- .textContent=allSold;
+ .textContent=
+ allSold;
 
  document.getElementById('iEmpty')
- .textContent=recovered;
+ .textContent=
+ recovered;
 
- /* MAPA VISUAL */
+ /* ESTADISTICAS DEL MAPA */
 
  const gpsClients=
  clients.filter(hasGps);
 
- document.getElementById('map')
- .innerHTML=
- gpsClients.length
- ?
- gpsClients.map((c,i)=>`
+ const pendingGps=
+ clients.length-
+ gpsClients.length;
 
-  <div
-   class="pin"
-   style="
-    left:${8+(i*17)%75}%;
-    top:${15+(i*23)%65}%
-   ">
-   📍 ${escapeHtml(c.name)}
-  </div>
+ document.getElementById('mapTotalClients')
+ .textContent=
+ clients.length;
 
- `).join('')
- :
- `
-  <div style="
-   position:absolute;
-   z-index:3;
-   left:50%;
-   top:50%;
-   transform:translate(-50%,-50%);
-   color:#536a6e;
-   text-align:center">
+ document.getElementById('mapGpsClients')
+ .textContent=
+ gpsClients.length;
 
-   Todavía no hay clientes con GPS registrado
+ document.getElementById('mapPendingClients')
+ .textContent=
+ pendingGps;
 
-  </div>
- `;
-
- /* RUTAS */
+ /* DIRECTORIO DE RUTAS */
 
  document.getElementById('routeList')
  .innerHTML=
@@ -2017,6 +2485,7 @@ function render(){
     </div>
 
     <div class="routeAddress">
+
      ${
       c.address
       ?
@@ -2024,6 +2493,7 @@ function render(){
       :
       'Sin dirección registrada'
      }
+
     </div>
 
     <div class="routeAddress">
@@ -2033,7 +2503,7 @@ function render(){
       ?
       '<span class="gpsBadge">GPS exacto guardado</span>'
       :
-      '<span class="noGpsBadge">Ubicación por dirección</span>'
+      '<span class="noGpsBadge">Pendiente registrar GPS</span>'
      }
 
     </div>
@@ -2046,7 +2516,7 @@ function render(){
     `<button
       class="mapBtn"
       data-route-map="${c.id}">
-      🧭 Ir con Google Maps
+      🧭 Navegar
      </button>`
     :
     ''
@@ -2058,16 +2528,31 @@ function render(){
  :
  '<div style="color:#6b7d82">No hay clientes registrados.</div>';
 
- document.querySelectorAll('[data-route-map]')
+ document
+ .querySelectorAll(
+  '[data-route-map]'
+ )
  .forEach(button=>{
 
   button.onclick=()=>{
 
    openMapsByClientId(
-    Number(button.dataset.routeMap)
+    Number(
+     button.dataset.routeMap
+    )
    );
   };
  });
+
+ /*
+  Si el mapa ya existe,
+  actualizamos los puntos.
+ */
+
+ if(realMap){
+
+  updateMapMarkers();
+ }
 }
 
 /* =========================
@@ -2085,7 +2570,8 @@ function table(headers,rows){
 
     ${
      headers.map(
-      x=>`<th>${escapeHtml(x)}</th>`
+      x=>
+      `<th>${escapeHtml(x)}</th>`
      ).join('')
     }
 
@@ -2103,7 +2589,8 @@ function table(headers,rows){
 
       ${
        r.map(
-        x=>`<td>${escapeHtml(x??'')}</td>`
+        x=>
+        `<td>${escapeHtml(x??'')}</td>`
        ).join('')
       }
 
@@ -2116,7 +2603,10 @@ function table(headers,rows){
 
       <td
        colspan="${headers.length}"
-       style="text-align:center;color:#6b7d82;padding:30px">
+       style="
+        text-align:center;
+        color:#6b7d82;
+        padding:30px">
 
        No hay registros.
 
@@ -2235,17 +2725,19 @@ setDate();
 checkSession();
 
 supabaseClient.auth
-.onAuthStateChange((event,session)=>{
+.onAuthStateChange(
+ (event,session)=>{
 
- if(event==='SIGNED_OUT'){
+  if(event==='SIGNED_OUT'){
 
-  document.getElementById('app')
-  .style.display='none';
+   document.getElementById('app')
+   .style.display='none';
 
-  document.getElementById('loginScreen')
-  .style.display='flex';
+   document.getElementById('loginScreen')
+   .style.display='flex';
+  }
  }
-});
+);
 
 </script>
 
