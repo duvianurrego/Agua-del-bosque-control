@@ -75,10 +75,7 @@ button{cursor:pointer}
 
 /* APP */
 #app{display:none}
-.appLayout{
- min-height:100vh;
- display:flex
-}
+.appLayout{min-height:100vh;display:flex}
 
 /* SIDEBAR */
 .sidebar{
@@ -98,15 +95,9 @@ button{cursor:pointer}
  border-bottom:1px solid rgba(255,255,255,.14);
  margin-bottom:16px
 }
-.brandTitle{
- font-size:20px;
- font-weight:800
-}
-.brandSub{
- font-size:12px;
- opacity:.72;
- margin-top:5px
-}
+.brandTitle{font-size:20px;font-weight:800}
+.brandSub{font-size:12px;opacity:.72;margin-top:5px}
+
 .menuBtn{
  width:100%;
  border:0;
@@ -119,16 +110,12 @@ button{cursor:pointer}
  font-weight:600;
  transition:.2s
 }
-.menuBtn:hover,
-.menuBtn.active{
+.menuBtn:hover,.menuBtn.active{
  background:rgba(255,255,255,.15);
  color:#fff
 }
-.menuIcon{
- display:inline-block;
- width:28px;
- font-size:17px
-}
+.menuIcon{display:inline-block;width:28px;font-size:17px}
+
 .sidebarBottom{
  margin-top:25px;
  padding-top:15px;
@@ -167,15 +154,8 @@ button{cursor:pointer}
  top:0;
  z-index:10
 }
-.welcome{
- font-size:20px;
- font-weight:800
-}
-.dateText{
- color:var(--muted);
- font-size:13px;
- margin-top:4px
-}
+.welcome{font-size:20px;font-weight:800}
+.dateText{color:var(--muted);font-size:13px;margin-top:4px}
 .mobileMenu{
  display:none;
  border:0;
@@ -191,14 +171,8 @@ button{cursor:pointer}
 }
 .panel{display:none}
 .panel.active{display:block}
-.sectionTitle{
- font-size:25px;
- margin:0 0 5px
-}
-.sectionSub{
- color:var(--muted);
- margin:0 0 22px
-}
+.sectionTitle{font-size:25px;margin:0 0 5px}
+.sectionSub{color:var(--muted);margin:0 0 22px}
 
 /* DASHBOARD */
 .statsGrid{
@@ -213,14 +187,9 @@ button{cursor:pointer}
  padding:18px;
  box-shadow:var(--shadow)
 }
-.statTop{
- display:flex;
- align-items:center;
- justify-content:space-between
-}
+.statTop{display:flex;align-items:center;justify-content:space-between}
 .statIcon{
- width:42px;
- height:42px;
+ width:42px;height:42px;
  display:flex;
  align-items:center;
  justify-content:center;
@@ -228,15 +197,9 @@ button{cursor:pointer}
  border-radius:12px;
  font-size:21px
 }
-.statLabel{
- color:var(--muted);
- font-size:13px
-}
-.statValue{
- font-size:27px;
- font-weight:800;
- margin-top:9px
-}
+.statLabel{color:var(--muted);font-size:13px}
+.statValue{font-size:27px;font-weight:800;margin-top:9px}
+
 .dashboardGrid{
  display:grid;
  grid-template-columns:1.5fr 1fr;
@@ -250,11 +213,8 @@ button{cursor:pointer}
  padding:20px;
  box-shadow:var(--shadow)
 }
-.cardTitle{
- font-size:17px;
- font-weight:800;
- margin-bottom:15px
-}
+.cardTitle{font-size:17px;font-weight:800;margin-bottom:15px}
+
 .progressOuter{
  height:15px;
  background:#e8efed;
@@ -327,6 +287,19 @@ input,select{
  background:var(--danger);
  color:#fff
 }
+.mapBtn{
+ display:inline-block;
+ border:0;
+ border-radius:9px;
+ padding:8px 11px;
+ background:#e7f6f0;
+ color:#087b5c;
+ font-weight:700;
+ white-space:nowrap
+}
+.mapBtn:hover{
+ background:#d6efe5
+}
 
 /* TABLE */
 .tableWrap{
@@ -339,7 +312,7 @@ input,select{
 table{
  width:100%;
  border-collapse:collapse;
- min-width:650px
+ min-width:720px
 }
 th{
  background:#f7faf9;
@@ -363,14 +336,67 @@ td{font-size:14px}
  font-weight:bold
 }
 
-/* MAP PLACEHOLDER */
+/* RUTAS */
+.routeHero{
+ background:linear-gradient(135deg,#063b5c,#087b5c);
+ color:#fff;
+ border-radius:18px;
+ padding:22px;
+ margin-bottom:17px;
+ box-shadow:var(--shadow)
+}
+.routeHero h3{margin:0 0 7px}
+.routeHero p{margin:0;opacity:.85}
+
+.routeCard{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:15px;
+ padding:15px 0;
+ border-bottom:1px solid var(--border)
+}
+.routeCard:last-child{border-bottom:0}
+.routeInfo{min-width:0}
+.routeName{font-weight:800}
+.routeAddress{
+ color:var(--muted);
+ font-size:13px;
+ margin-top:4px
+}
+
+/* MAP VISUAL */
 .map{
- height:320px;
+ height:280px;
  border-radius:17px;
- background:linear-gradient(#dff3e8,#cfe6ef);
+ background:
+ radial-gradient(circle at 20% 30%,rgba(8,123,92,.15),transparent 15%),
+ radial-gradient(circle at 75% 65%,rgba(6,59,92,.15),transparent 18%),
+ linear-gradient(#e6f5ec,#dceef4);
  position:relative;
  overflow:hidden;
- border:1px solid var(--border)
+ border:1px solid var(--border);
+ margin-bottom:17px
+}
+.map::before{
+ content:"";
+ position:absolute;
+ left:-5%;
+ top:45%;
+ width:110%;
+ height:10px;
+ background:rgba(255,255,255,.8);
+ transform:rotate(-8deg)
+}
+.map::after{
+ content:"";
+ position:absolute;
+ left:45%;
+ top:-10%;
+ width:9px;
+ height:120%;
+ background:rgba(255,255,255,.75);
+ transform:rotate(15deg)
 }
 .pin{
  position:absolute;
@@ -378,14 +404,16 @@ td{font-size:14px}
  color:#fff;
  padding:7px 9px;
  border-radius:12px;
- font-size:12px
+ font-size:12px;
+ z-index:2;
+ max-width:160px;
+ overflow:hidden;
+ text-overflow:ellipsis;
+ white-space:nowrap
 }
 
 /* EMPTY MODULES */
-.moduleComing{
- text-align:center;
- padding:45px 20px
-}
+.moduleComing{text-align:center;padding:45px 20px}
 .moduleIcon{font-size:50px}
 .moduleComing h3{margin-bottom:7px}
 .moduleComing p{color:var(--muted)}
@@ -402,15 +430,16 @@ td{font-size:14px}
   width:250px
  }
  .sidebar.open{transform:translateX(0)}
- .mainArea{
-  margin-left:0;
-  width:100%
- }
+ .mainArea{margin-left:0;width:100%}
  .mobileMenu{display:block}
  .topbar{padding:0 15px}
  .content{padding:17px}
  .statsGrid{grid-template-columns:1fr 1fr}
  .welcome{font-size:17px}
+ .routeCard{
+  align-items:flex-start;
+  flex-direction:column
+ }
 }
 @media(max-width:430px){
  .statsGrid{grid-template-columns:1fr}
@@ -420,20 +449,21 @@ td{font-size:14px}
 
 <body>
 
-<!-- LOGIN -->
 <div id="loginScreen">
  <div class="loginCard">
   <h1>Agua del Bosque</h1>
   <p>Control 4.0</p>
   <h3>Acceso autorizado</h3>
+
   <input id="loginEmail" type="email" placeholder="Correo electrónico">
   <input id="loginPassword" type="password" placeholder="Contraseña">
+
   <button class="loginBtn" onclick="login()">Ingresar</button>
+
   <div id="loginMessage"></div>
  </div>
 </div>
 
-<!-- APP -->
 <div id="app">
 <div class="appLayout">
 
@@ -496,11 +526,13 @@ td{font-size:14px}
 <header class="topbar">
  <div style="display:flex;align-items:center;gap:12px">
   <button class="mobileMenu" onclick="toggleMenu()">☰</button>
+
   <div>
    <div class="welcome" id="welcomeText">Bienvenido a Agua del Bosque</div>
    <div class="dateText" id="dateText"></div>
   </div>
  </div>
+
  <div>💧</div>
 </header>
 
@@ -556,9 +588,11 @@ td{font-size:14px}
 
   <div class="card">
    <div class="cardTitle">🎯 Meta diaria de ventas</div>
+
    <div class="progressOuter">
     <div class="progressInner" id="goalProgress"></div>
    </div>
+
    <div class="goalNumbers">
     <span id="goalText">0 de 500 garrafones</span>
     <span id="goalPercent">0%</span>
@@ -570,11 +604,23 @@ td{font-size:14px}
 
   <div class="card">
    <div class="cardTitle">⚡ Accesos rápidos</div>
+
    <div class="quickGrid">
-    <button class="quickBtn" onclick="openPanel('ventas')">🛒<br>Nueva venta</button>
-    <button class="quickBtn" onclick="openPanel('clientes')">👤<br>Nuevo cliente</button>
-    <button class="quickBtn" onclick="openPanel('produccion')">🏭<br>Producción</button>
-    <button class="quickBtn" onclick="openPanel('rutas')">🗺️<br>Ver rutas</button>
+    <button class="quickBtn" onclick="openPanel('ventas')">
+     🛒<br>Nueva venta
+    </button>
+
+    <button class="quickBtn" onclick="openPanel('clientes')">
+     👤<br>Nuevo cliente
+    </button>
+
+    <button class="quickBtn" onclick="openPanel('produccion')">
+     🏭<br>Producción
+    </button>
+
+    <button class="quickBtn" onclick="openPanel('rutas')">
+     🗺️<br>Ver rutas
+    </button>
    </div>
   </div>
 
@@ -583,15 +629,25 @@ td{font-size:14px}
 
 <!-- CLIENTES -->
 <section id="clientes" class="panel">
+
  <h1 class="sectionTitle">Clientes</h1>
- <p class="sectionSub">Registro y consulta de clientes.</p>
+ <p class="sectionSub">
+  Registro, consulta y ubicación de clientes.
+ </p>
 
  <div class="formCard">
+
   <div class="cardTitle">➕ Nuevo cliente</div>
+
   <div class="formGrid">
+
    <input id="cname" placeholder="Nombre / negocio">
+
    <input id="cphone" placeholder="Celular">
-   <input id="caddress" placeholder="Dirección / sector">
+
+   <input id="caddress"
+          placeholder="Dirección / sector">
+
    <select id="ctype">
     <option>Hogar</option>
     <option>Conjunto</option>
@@ -601,128 +657,269 @@ td{font-size:14px}
     <option>Gimnasio</option>
     <option>Distribuidor</option>
    </select>
+
   </div>
-  <button id="saveClientBtn" class="primaryBtn" style="margin-top:12px" onclick="addClient()">Guardar cliente</button>
+
+  <button
+   id="saveClientBtn"
+   class="primaryBtn"
+   style="margin-top:12px"
+   onclick="addClient()">
+   Guardar cliente
+  </button>
+
  </div>
 
  <div class="tableWrap" id="clientsTable"></div>
+
 </section>
 
 <!-- VENTAS -->
 <section id="ventas" class="panel">
+
  <h1 class="sectionTitle">Ventas</h1>
- <p class="sectionSub">Las ventas se almacenan directamente en Supabase.</p>
+
+ <p class="sectionSub">
+  Las ventas se almacenan directamente en Supabase.
+ </p>
 
  <div class="formCard">
+
   <div class="cardTitle">🛒 Registrar nueva venta</div>
+
   <div class="formGrid">
+
    <select id="vclient"></select>
-   <input id="vqty" type="number" min="1" value="1" placeholder="Cantidad">
-   <input id="vprice" type="number" min="1" value="7000" placeholder="Precio unitario">
+
+   <input
+    id="vqty"
+    type="number"
+    min="1"
+    value="1"
+    placeholder="Cantidad">
+
+   <input
+    id="vprice"
+    type="number"
+    min="1"
+    value="7000"
+    placeholder="Precio unitario">
+
    <select id="vpay">
     <option>Efectivo</option>
     <option>Transferencia</option>
     <option>Crédito</option>
    </select>
-   <input id="vempties" type="number" min="0" value="0" placeholder="Envases recuperados">
-   <input id="vnotes" placeholder="Observaciones">
+
+   <input
+    id="vempties"
+    type="number"
+    min="0"
+    value="0"
+    placeholder="Envases recuperados">
+
+   <input
+    id="vnotes"
+    placeholder="Observaciones">
+
   </div>
-  <button id="saveSaleBtn" class="primaryBtn" style="margin-top:12px" onclick="addSale()">Registrar venta</button>
+
+  <button
+   id="saveSaleBtn"
+   class="primaryBtn"
+   style="margin-top:12px"
+   onclick="addSale()">
+   Registrar venta
+  </button>
+
  </div>
 
  <div class="tableWrap" id="salesTable"></div>
+
 </section>
 
 <!-- PEDIDOS -->
 <section id="pedidos" class="panel">
+
  <h1 class="sectionTitle">Pedidos</h1>
  <p class="sectionSub">Próximo módulo operativo.</p>
+
  <div class="card moduleComing">
   <div class="moduleIcon">📋</div>
   <h3>Gestión de pedidos</h3>
-  <p>Aquí controlaremos pedidos pendientes, en ruta y entregados.</p>
+  <p>
+   Aquí controlaremos pedidos pendientes,
+   en ruta y entregados.
+  </p>
  </div>
+
 </section>
 
 <!-- RUTAS -->
 <section id="rutas" class="panel">
- <h1 class="sectionTitle">Rutas</h1>
- <p class="sectionSub">Visualización inicial de clientes y zonas de entrega.</p>
- <div class="map" id="map"></div>
- <div class="card" style="margin-top:17px">
-  <div class="cardTitle">Clientes por ruta</div>
-  <div id="routeList"></div>
+
+ <h1 class="sectionTitle">Rutas y ubicaciones</h1>
+
+ <p class="sectionSub">
+  Acceso rápido a la ubicación de cada cliente en Google Maps.
+ </p>
+
+ <div class="routeHero">
+  <h3>🗺️ Agua del Bosque · Villavicencio</h3>
+  <p>
+   Seleccione un cliente para abrir su dirección directamente
+   en Google Maps.
+  </p>
  </div>
+
+ <div class="map" id="map"></div>
+
+ <div class="card">
+
+  <div class="cardTitle">
+   📍 Clientes registrados
+  </div>
+
+  <div id="routeList"></div>
+
+ </div>
+
 </section>
 
 <!-- PRODUCCION -->
 <section id="produccion" class="panel">
+
  <h1 class="sectionTitle">Producción</h1>
- <p class="sectionSub">Temporalmente este módulo continúa guardándose en el navegador.</p>
+
+ <p class="sectionSub">
+  Temporalmente este módulo continúa guardándose en el navegador.
+ </p>
 
  <div class="formCard">
+
   <div class="formGrid">
-   <input id="pqty" type="number" placeholder="Garrafones producidos">
-   <input id="preject" type="number" value="0" placeholder="Rechazados">
+
+   <input
+    id="pqty"
+    type="number"
+    placeholder="Garrafones producidos">
+
+   <input
+    id="preject"
+    type="number"
+    value="0"
+    placeholder="Rechazados">
+
   </div>
-  <button class="primaryBtn" style="margin-top:12px" onclick="addProduction()">Registrar producción</button>
+
+  <button
+   class="primaryBtn"
+   style="margin-top:12px"
+   onclick="addProduction()">
+   Registrar producción
+  </button>
+
  </div>
 
  <div class="tableWrap" id="prodTable"></div>
+
 </section>
 
 <!-- GARRAFONES -->
 <section id="inventario" class="panel">
+
  <h1 class="sectionTitle">Control de garrafones</h1>
- <p class="sectionSub">Resumen inicial de envases.</p>
+
+ <p class="sectionSub">
+  Resumen inicial de envases.
+ </p>
 
  <div class="statsGrid">
+
   <div class="statCard">
    <div class="statLabel">Llenos estimados</div>
    <div class="statValue" id="iFull">0</div>
   </div>
+
   <div class="statCard">
    <div class="statLabel">Vendidos</div>
    <div class="statValue" id="iSold">0</div>
   </div>
+
   <div class="statCard">
    <div class="statLabel">Recuperados</div>
    <div class="statValue" id="iEmpty">0</div>
   </div>
+
  </div>
+
 </section>
 
 <!-- CARTERA -->
 <section id="cartera" class="panel">
+
  <h1 class="sectionTitle">Cartera</h1>
- <p class="sectionSub">Control inicial de ventas realizadas a crédito.</p>
+
+ <p class="sectionSub">
+  Control inicial de ventas realizadas a crédito.
+ </p>
 
  <div class="statCard" style="max-width:350px">
   <div class="statLabel">Crédito registrado hoy</div>
   <div class="statValue" id="debtTotal">$0</div>
  </div>
+
 </section>
 
 <!-- FIDELIZACION -->
 <section id="fidelizacion" class="panel">
+
  <h1 class="sectionTitle">Fidelización</h1>
- <p class="sectionSub">Programa comercial Agua del Bosque.</p>
+
+ <p class="sectionSub">
+  Programa comercial Agua del Bosque.
+ </p>
+
  <div class="card moduleComing">
+
   <div class="moduleIcon">🎁</div>
+
   <h3>Programa de fidelización</h3>
-  <p>Este módulo permitirá administrar participantes, números asignados y premios.</p>
+
+  <p>
+   Este módulo permitirá administrar participantes,
+   números asignados y premios.
+  </p>
+
  </div>
+
 </section>
 
 <!-- REPORTES -->
 <section id="reportes" class="panel">
+
  <h1 class="sectionTitle">Reportes</h1>
- <p class="sectionSub">Consulta y exportación de información.</p>
+
+ <p class="sectionSub">
+  Consulta y exportación de información.
+ </p>
 
  <div class="card">
-  <button class="primaryBtn" onclick="exportCSV()">📥 Exportar ventas CSV</button>
-  <button class="dangerBtn" onclick="resetDemo()">Borrar producción local de prueba</button>
+
+  <button
+   class="primaryBtn"
+   onclick="exportCSV()">
+   📥 Exportar ventas CSV
+  </button>
+
+  <button
+   class="dangerBtn"
+   onclick="resetDemo()">
+   Borrar producción local de prueba
+  </button>
+
  </div>
+
 </section>
 
 </main>
@@ -733,10 +930,15 @@ td{font-size:14px}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-const SUPABASE_URL='https://cxzmhuydzxevlztkjbwz.supabase.co';
-const SUPABASE_PUBLISHABLE_KEY='sb_publishable_phdZAar5r0HiPxMYX_YWng_pu9kl0k3';
 
-const supabaseClient=window.supabase.createClient(
+const SUPABASE_URL=
+'https://cxzmhuydzxevlztkjbwz.supabase.co';
+
+const SUPABASE_PUBLISHABLE_KEY=
+'sb_publishable_phdZAar5r0HiPxMYX_YWng_pu9kl0k3';
+
+const supabaseClient=
+window.supabase.createClient(
  SUPABASE_URL,
  SUPABASE_PUBLISHABLE_KEY
 );
@@ -744,7 +946,8 @@ const supabaseClient=window.supabase.createClient(
 const KEY='adb_control_v2';
 
 let localDb=JSON.parse(
- localStorage.getItem(KEY) || '{"production":[]}'
+ localStorage.getItem(KEY) ||
+ '{"production":[]}'
 );
 
 if(!Array.isArray(localDb.production)){
@@ -754,67 +957,147 @@ if(!Array.isArray(localDb.production)){
 let clients=[];
 let sales=[];
 
-const money=n=>new Intl.NumberFormat('es-CO',{
- style:'currency',
- currency:'COP',
- maximumFractionDigits:0
-}).format(Number(n)||0);
+const money=n=>
+ new Intl.NumberFormat(
+  'es-CO',
+  {
+   style:'currency',
+   currency:'COP',
+   maximumFractionDigits:0
+  }
+ ).format(Number(n)||0);
 
 function today(s){
- return new Date(s).toDateString()===new Date().toDateString();
+ return new Date(s).toDateString()===
+        new Date().toDateString();
 }
 
 function setDate(){
+
  const now=new Date();
 
  document.getElementById('dateText').textContent=
- now.toLocaleDateString('es-CO',{
-  weekday:'long',
-  day:'numeric',
-  month:'long',
-  year:'numeric'
- });
+ now.toLocaleDateString(
+  'es-CO',
+  {
+   weekday:'long',
+   day:'numeric',
+   month:'long',
+   year:'numeric'
+  }
+ );
 
  const hour=now.getHours();
+
  let greeting='Buenos días';
 
- if(hour>=12 && hour<18) greeting='Buenas tardes';
- if(hour>=18) greeting='Buenas noches';
+ if(hour>=12 && hour<18){
+  greeting='Buenas tardes';
+ }
+
+ if(hour>=18){
+  greeting='Buenas noches';
+ }
 
  document.getElementById('welcomeText').textContent=
  greeting+', bienvenido a Agua del Bosque';
 }
 
 function saveLocal(){
- localStorage.setItem(KEY,JSON.stringify(localDb));
+
+ localStorage.setItem(
+  KEY,
+  JSON.stringify(localDb)
+ );
+
  render();
 }
 
+/* =========================
+   GOOGLE MAPS - VERSION FACIL
+========================= */
+
+function getMapsUrl(address){
+
+ const cleanAddress=
+  String(address||'').trim();
+
+ if(!cleanAddress){
+  return '';
+ }
+
+ const search=
+  cleanAddress+
+  ', Villavicencio, Meta, Colombia';
+
+ return 'https://www.google.com/maps/search/?api=1&query='+
+        encodeURIComponent(search);
+}
+
+function openMaps(address){
+
+ const url=getMapsUrl(address);
+
+ if(!url){
+  alert(
+   'Este cliente todavía no tiene una dirección registrada.'
+  );
+  return;
+ }
+
+ window.open(
+  url,
+  '_blank',
+  'noopener,noreferrer'
+ );
+}
+
+/* =========================
+   LOGIN
+========================= */
+
 async function login(){
 
- const email=document.getElementById('loginEmail').value.trim();
- const password=document.getElementById('loginPassword').value;
- const message=document.getElementById('loginMessage');
+ const email=
+  document.getElementById('loginEmail')
+  .value.trim();
+
+ const password=
+  document.getElementById('loginPassword')
+  .value;
+
+ const message=
+  document.getElementById('loginMessage');
 
  if(!email || !password){
-  message.textContent='Ingrese correo y contraseña.';
+
+  message.textContent=
+   'Ingrese correo y contraseña.';
+
   return;
  }
 
  message.textContent='Ingresando...';
 
- const {data,error}=await supabaseClient.auth.signInWithPassword({
+ const {data,error}=
+ await supabaseClient.auth
+ .signInWithPassword({
   email,
   password
  });
 
  if(error){
+
   console.error(error);
-  message.textContent='No fue posible ingresar. Verifique sus datos.';
+
+  message.textContent=
+   'No fue posible ingresar. Verifique sus datos.';
+
   return;
  }
 
  message.textContent='';
+
  await showApplication(data.user);
 }
 
@@ -822,16 +1105,27 @@ async function logout(){
 
  await supabaseClient.auth.signOut();
 
- document.getElementById('app').style.display='none';
- document.getElementById('loginScreen').style.display='flex';
- document.getElementById('loginPassword').value='';
+ document.getElementById('app')
+ .style.display='none';
+
+ document.getElementById('loginScreen')
+ .style.display='flex';
+
+ document.getElementById('loginPassword')
+ .value='';
 }
 
 async function showApplication(user){
 
- document.getElementById('loginScreen').style.display='none';
- document.getElementById('app').style.display='block';
- document.getElementById('currentUser').textContent=user?.email || 'Usuario autorizado';
+ document.getElementById('loginScreen')
+ .style.display='none';
+
+ document.getElementById('app')
+ .style.display='block';
+
+ document.getElementById('currentUser')
+ .textContent=
+ user?.email || 'Usuario autorizado';
 
  setDate();
 
@@ -843,60 +1137,110 @@ async function showApplication(user){
 
 async function checkSession(){
 
- const {data}=await supabaseClient.auth.getSession();
+ const {data}=
+ await supabaseClient.auth.getSession();
 
  if(data.session){
-  await showApplication(data.session.user);
+
+  await showApplication(
+   data.session.user
+  );
+
  }else{
-  document.getElementById('loginScreen').style.display='flex';
-  document.getElementById('app').style.display='none';
+
+  document.getElementById('loginScreen')
+  .style.display='flex';
+
+  document.getElementById('app')
+  .style.display='none';
  }
 }
 
-document.getElementById('loginPassword').addEventListener('keydown',e=>{
- if(e.key==='Enter') login();
-});
+document.getElementById('loginPassword')
+.addEventListener(
+ 'keydown',
+ e=>{
+  if(e.key==='Enter'){
+   login();
+  }
+ }
+);
+
+/* =========================
+   CLIENTES
+========================= */
 
 async function loadClients(){
 
- const {data,error}=await supabaseClient
+ const {data,error}=
+ await supabaseClient
  .from('clientes')
  .select('*')
- .order('created_at',{ascending:false});
+ .order(
+  'created_at',
+  {ascending:false}
+ );
 
  if(error){
+
   console.error(error);
-  alert('No fue posible cargar los clientes.');
+
+  alert(
+   'No fue posible cargar los clientes.'
+  );
+
   return;
  }
 
- clients=(data||[]).map(row=>({
-  id:Number(row.id),
-  name:row.nombre||'',
-  phone:row.celular||'',
-  address:row.direccion||'',
-  type:row.tipo_cliente||'',
-  created:row.created_at
- }));
+ clients=(data||[]).map(
+  row=>({
+   id:Number(row.id),
+   name:row.nombre||'',
+   phone:row.celular||'',
+   address:row.direccion||'',
+   type:row.tipo_cliente||'',
+   created:row.created_at
+  })
+ );
 }
 
 async function addClient(){
 
- const name=document.getElementById('cname').value.trim();
- const phone=document.getElementById('cphone').value.trim();
- const address=document.getElementById('caddress').value.trim();
- const type=document.getElementById('ctype').value;
- const button=document.getElementById('saveClientBtn');
+ const name=
+ document.getElementById('cname')
+ .value.trim();
+
+ const phone=
+ document.getElementById('cphone')
+ .value.trim();
+
+ const address=
+ document.getElementById('caddress')
+ .value.trim();
+
+ const type=
+ document.getElementById('ctype')
+ .value;
+
+ const button=
+ document.getElementById('saveClientBtn');
 
  if(!name){
-  alert('Ingrese el nombre.');
+
+  alert(
+   'Ingrese el nombre.'
+  );
+
   return;
  }
 
  button.disabled=true;
  button.textContent='Guardando...';
 
- const {error}=await supabaseClient.from('clientes').insert({
+ const {error}=
+ await supabaseClient
+ .from('clientes')
+ .insert({
   nombre:name,
   celular:phone,
   direccion:address,
@@ -907,87 +1251,173 @@ async function addClient(){
  });
 
  button.disabled=false;
- button.textContent='Guardar cliente';
+
+ button.textContent=
+ 'Guardar cliente';
 
  if(error){
+
   console.error(error);
-  alert('El cliente NO fue guardado.');
+
+  alert(
+   'El cliente NO fue guardado.'
+  );
+
   return;
  }
 
- document.getElementById('cname').value='';
- document.getElementById('cphone').value='';
- document.getElementById('caddress').value='';
+ document.getElementById('cname')
+ .value='';
+
+ document.getElementById('cphone')
+ .value='';
+
+ document.getElementById('caddress')
+ .value='';
 
  await loadClients();
+
  render();
 
- alert('Cliente guardado correctamente.');
+ alert(
+  'Cliente guardado correctamente.'
+ );
 }
+
+/* =========================
+   VENTAS
+========================= */
 
 async function loadSales(){
 
- const {data,error}=await supabaseClient
+ const {data,error}=
+ await supabaseClient
  .from('ventas')
  .select('*')
- .order('created_at',{ascending:false});
+ .order(
+  'created_at',
+  {ascending:false}
+ );
 
  if(error){
+
   console.error(error);
+
   sales=[];
-  alert('No fue posible cargar las ventas.');
+
+  alert(
+   'No fue posible cargar las ventas.'
+  );
+
   return;
  }
 
- sales=(data||[]).map(row=>({
-  id:Number(row.id),
-  clientId:Number(row.cliente_id),
-  qty:Number(row.cantidad)||0,
-  price:Number(row.precio_unitario)||0,
-  total:Number(row.total)||0,
-  pay:row.metodo_pago||'',
-  empties:Number(row.envases_recuperados)||0,
-  notes:row.observaciones||'',
-  date:row.created_at
- }));
+ sales=(data||[]).map(
+  row=>({
+   id:Number(row.id),
+   clientId:Number(row.cliente_id),
+   qty:Number(row.cantidad)||0,
+   price:Number(row.precio_unitario)||0,
+   total:Number(row.total)||0,
+   pay:row.metodo_pago||'',
+   empties:Number(row.envases_recuperados)||0,
+   notes:row.observaciones||'',
+   date:row.created_at
+  })
+ );
 }
 
 async function addSale(){
 
- const clientId=Number(document.getElementById('vclient').value);
- const qty=Number(document.getElementById('vqty').value);
- const price=Number(document.getElementById('vprice').value);
- const pay=document.getElementById('vpay').value;
- const empties=Number(document.getElementById('vempties').value)||0;
- const notes=document.getElementById('vnotes').value.trim();
- const button=document.getElementById('saveSaleBtn');
+ const clientId=
+ Number(
+  document.getElementById('vclient')
+  .value
+ );
+
+ const qty=
+ Number(
+  document.getElementById('vqty')
+  .value
+ );
+
+ const price=
+ Number(
+  document.getElementById('vprice')
+  .value
+ );
+
+ const pay=
+ document.getElementById('vpay')
+ .value;
+
+ const empties=
+ Number(
+  document.getElementById('vempties')
+  .value
+ )||0;
+
+ const notes=
+ document.getElementById('vnotes')
+ .value.trim();
+
+ const button=
+ document.getElementById('saveSaleBtn');
 
  if(!clientId){
-  alert('Seleccione un cliente.');
+
+  alert(
+   'Seleccione un cliente.'
+  );
+
   return;
  }
 
- if(!Number.isInteger(qty)||qty<=0){
-  alert('Ingrese una cantidad válida.');
+ if(
+  !Number.isInteger(qty) ||
+  qty<=0
+ ){
+
+  alert(
+   'Ingrese una cantidad válida.'
+  );
+
   return;
  }
 
- if(!Number.isFinite(price)||price<=0){
-  alert('Ingrese un precio válido.');
+ if(
+  !Number.isFinite(price) ||
+  price<=0
+ ){
+
+  alert(
+   'Ingrese un precio válido.'
+  );
+
   return;
  }
 
- if(!Number.isInteger(empties)||empties<0){
-  alert('Revise los envases recuperados.');
+ if(
+  !Number.isInteger(empties) ||
+  empties<0
+ ){
+
+  alert(
+   'Revise los envases recuperados.'
+  );
+
   return;
  }
 
  const total=qty*price;
 
  button.disabled=true;
- button.textContent='Guardando venta...';
 
- const {data,error}=await supabaseClient
+ button.textContent=
+ 'Guardando venta...';
+
+ const {data,error}=
+ await supabaseClient
  .from('ventas')
  .insert({
   cliente_id:clientId,
@@ -1002,37 +1432,72 @@ async function addSale(){
  .single();
 
  button.disabled=false;
- button.textContent='Registrar venta';
+
+ button.textContent=
+ 'Registrar venta';
 
  if(error){
+
   console.error(error);
-  alert('ATENCIÓN: la venta NO fue guardada.');
+
+  alert(
+   'ATENCIÓN: la venta NO fue guardada.'
+  );
+
   return;
  }
 
- if(!data||!data.id){
-  alert('Supabase no confirmó la venta. No la dé por registrada.');
+ if(!data || !data.id){
+
+  alert(
+   'Supabase no confirmó la venta. No la dé por registrada.'
+  );
+
   return;
  }
 
  await loadSales();
 
- document.getElementById('vqty').value='1';
- document.getElementById('vempties').value='0';
- document.getElementById('vnotes').value='';
+ document.getElementById('vqty')
+ .value='1';
+
+ document.getElementById('vempties')
+ .value='0';
+
+ document.getElementById('vnotes')
+ .value='';
 
  render();
 
- alert('Venta guardada correctamente en la base de datos.');
+ alert(
+  'Venta guardada correctamente en la base de datos.'
+ );
 }
+
+/* =========================
+   PRODUCCION LOCAL
+========================= */
 
 function addProduction(){
 
- const qty=Number(document.getElementById('pqty').value);
- const reject=Number(document.getElementById('preject').value)||0;
+ const qty=
+ Number(
+  document.getElementById('pqty')
+  .value
+ );
 
- if(!qty||qty<=0){
-  alert('Ingrese una cantidad válida.');
+ const reject=
+ Number(
+  document.getElementById('preject')
+  .value
+ )||0;
+
+ if(!qty || qty<=0){
+
+  alert(
+   'Ingrese una cantidad válida.'
+  );
+
   return;
  }
 
@@ -1043,30 +1508,42 @@ function addProduction(){
   date:new Date().toISOString()
  });
 
- document.getElementById('pqty').value='';
- document.getElementById('preject').value='0';
+ document.getElementById('pqty')
+ .value='';
+
+ document.getElementById('preject')
+ .value='0';
 
  saveLocal();
 }
 
+/* =========================
+   NAVEGACION
+========================= */
+
 function show(id,button){
 
- document.querySelectorAll('.panel').forEach(x=>{
-  x.classList.remove('active');
- });
+ document.querySelectorAll('.panel')
+ .forEach(
+  x=>x.classList.remove('active')
+ );
 
- document.getElementById(id).classList.add('active');
+ document.getElementById(id)
+ .classList.add('active');
 
- document.querySelectorAll('.menuBtn').forEach(x=>{
-  x.classList.remove('active');
- });
+ document.querySelectorAll('.menuBtn')
+ .forEach(
+  x=>x.classList.remove('active')
+ );
 
  if(button){
   button.classList.add('active');
  }
 
  if(window.innerWidth<=760){
-  document.getElementById('sidebar').classList.remove('open');
+
+  document.getElementById('sidebar')
+  .classList.remove('open');
  }
 
  render();
@@ -1074,7 +1551,8 @@ function show(id,button){
 
 function openPanel(id){
 
- const button=document.querySelector(
+ const button=
+ document.querySelector(
   '.menuBtn[data-panel="'+id+'"]'
  );
 
@@ -1082,194 +1560,620 @@ function openPanel(id){
 }
 
 function toggleMenu(){
- document.getElementById('sidebar').classList.toggle('open');
+
+ document.getElementById('sidebar')
+ .classList.toggle('open');
 }
 
 function clientName(id){
- return clients.find(c=>c.id===Number(id))?.name||'Cliente';
+
+ return clients.find(
+  c=>c.id===Number(id)
+ )?.name || 'Cliente';
 }
+
+/* =========================
+   SEGURIDAD HTML
+========================= */
+
+function escapeHtml(value){
+
+ return String(value??'')
+ .replaceAll('&','&amp;')
+ .replaceAll('<','&lt;')
+ .replaceAll('>','&gt;')
+ .replaceAll('"','&quot;')
+ .replaceAll("'","&#039;");
+}
+
+/* =========================
+   RENDER
+========================= */
 
 function render(){
 
- const todaySales=sales.filter(x=>today(x.date));
- const todayProd=localDb.production.filter(x=>today(x.date));
+ const todaySales=
+ sales.filter(
+  x=>today(x.date)
+ );
 
- const units=todaySales.reduce((a,b)=>a+b.qty,0);
- const salesValue=todaySales.reduce((a,b)=>a+b.total,0);
- const production=todayProd.reduce((a,b)=>a+b.qty,0);
+ const todayProd=
+ localDb.production.filter(
+  x=>today(x.date)
+ );
 
- const debt=todaySales
- .filter(x=>x.pay==='Crédito')
- .reduce((a,b)=>a+b.total,0);
+ const units=
+ todaySales.reduce(
+  (a,b)=>a+b.qty,
+  0
+ );
 
- document.getElementById('kUnits').textContent=units;
- document.getElementById('kSales').textContent=money(salesValue);
- document.getElementById('kClients').textContent=clients.length;
- document.getElementById('kDebt').textContent=money(debt);
- document.getElementById('debtTotal').textContent=money(debt);
+ const salesValue=
+ todaySales.reduce(
+  (a,b)=>a+b.total,
+  0
+ );
 
- const percent=Math.min(100,Math.round((units/500)*100));
+ const debt=
+ todaySales
+ .filter(
+  x=>x.pay==='Crédito'
+ )
+ .reduce(
+  (a,b)=>a+b.total,
+  0
+ );
 
- document.getElementById('goalProgress').style.width=percent+'%';
- document.getElementById('goalText').textContent=units+' de 500 garrafones';
- document.getElementById('goalPercent').textContent=percent+'%';
+ document.getElementById('kUnits')
+ .textContent=units;
 
- document.getElementById('activity').innerHTML=
+ document.getElementById('kSales')
+ .textContent=money(salesValue);
+
+ document.getElementById('kClients')
+ .textContent=clients.length;
+
+ document.getElementById('kDebt')
+ .textContent=money(debt);
+
+ document.getElementById('debtTotal')
+ .textContent=money(debt);
+
+ const percent=
+ Math.min(
+  100,
+  Math.round(
+   (units/500)*100
+  )
+ );
+
+ document.getElementById('goalProgress')
+ .style.width=
+ percent+'%';
+
+ document.getElementById('goalText')
+ .textContent=
+ units+' de 500 garrafones';
+
+ document.getElementById('goalPercent')
+ .textContent=
+ percent+'%';
+
+ /* ACTIVIDAD */
+
+ document.getElementById('activity')
+ .innerHTML=
  todaySales.length
  ?
- todaySales.slice(0,5).map(s=>`
-  <div style="padding:9px 0;border-bottom:1px solid #edf1f0">
-   <span class="badge">${s.pay}</span>
-   <b>${clientName(s.clientId)}</b>
-   — ${s.qty} garrafón(es)
-   — ${money(s.total)}
-  </div>
- `).join('')
+ todaySales
+ .slice(0,5)
+ .map(
+  s=>`
+   <div style="padding:9px 0;border-bottom:1px solid #edf1f0">
+    <span class="badge">
+     ${escapeHtml(s.pay)}
+    </span>
+    <b>
+     ${escapeHtml(clientName(s.clientId))}
+    </b>
+    — ${s.qty} garrafón(es)
+    — ${money(s.total)}
+   </div>
+  `
+ ).join('')
  :
  '<span style="color:#6b7d82">Aún no hay ventas registradas hoy.</span>';
 
- document.getElementById('vclient').innerHTML=
+ /* SELECT CLIENTES */
+
+ document.getElementById('vclient')
+ .innerHTML=
  '<option value="">Seleccione cliente</option>'+
- clients.map(c=>`
-  <option value="${c.id}">${c.name}</option>
- `).join('');
+ clients.map(
+  c=>`
+   <option value="${c.id}">
+    ${escapeHtml(c.name)}
+   </option>
+  `
+ ).join('');
 
- document.getElementById('clientsTable').innerHTML=table(
-  ['Cliente','Tipo','Celular','Dirección'],
-  clients.map(c=>[
-   c.name,
-   c.type,
-   c.phone,
-   c.address
-  ])
+ /* TABLA CLIENTES + GOOGLE MAPS */
+
+ document.getElementById('clientsTable')
+ .innerHTML=`
+ <table>
+
+  <thead>
+   <tr>
+    <th>Cliente</th>
+    <th>Tipo</th>
+    <th>Celular</th>
+    <th>Dirección</th>
+    <th>Mapa</th>
+   </tr>
+  </thead>
+
+  <tbody>
+
+   ${
+    clients.length
+    ?
+    clients.map(
+     c=>`
+      <tr>
+
+       <td>
+        <b>${escapeHtml(c.name)}</b>
+       </td>
+
+       <td>
+        ${escapeHtml(c.type)}
+       </td>
+
+       <td>
+        ${escapeHtml(c.phone)}
+       </td>
+
+       <td>
+        ${escapeHtml(c.address)}
+       </td>
+
+       <td>
+        ${
+         c.address
+         ?
+         `<button
+           class="mapBtn"
+           data-map-client="${c.id}">
+           📍 Abrir Maps
+          </button>`
+         :
+         '<span style="color:#999">Sin dirección</span>'
+        }
+       </td>
+
+      </tr>
+     `
+    ).join('')
+    :
+    `
+     <tr>
+      <td
+       colspan="5"
+       style="text-align:center;color:#6b7d82;padding:30px">
+       No hay clientes registrados.
+      </td>
+     </tr>
+    `
+   }
+
+  </tbody>
+
+ </table>
+ `;
+
+ document.querySelectorAll(
+  '[data-map-client]'
+ ).forEach(
+  button=>{
+
+   button.onclick=()=>{
+
+    const id=
+    Number(
+     button.dataset.mapClient
+    );
+
+    const client=
+    clients.find(
+     c=>c.id===id
+    );
+
+    if(client){
+     openMaps(client.address);
+    }
+   };
+  }
  );
 
- document.getElementById('salesTable').innerHTML=table(
-  ['Fecha','Cliente','Cantidad','Precio','Total','Pago','Envases'],
-  sales.map(s=>[
-   new Date(s.date).toLocaleString('es-CO'),
-   clientName(s.clientId),
-   s.qty,
-   money(s.price),
-   money(s.total),
-   s.pay,
-   s.empties
-  ])
+ /* VENTAS */
+
+ document.getElementById('salesTable')
+ .innerHTML=table(
+  [
+   'Fecha',
+   'Cliente',
+   'Cantidad',
+   'Precio',
+   'Total',
+   'Pago',
+   'Envases'
+  ],
+  sales.map(
+   s=>[
+    new Date(s.date)
+    .toLocaleString('es-CO'),
+
+    clientName(s.clientId),
+
+    s.qty,
+
+    money(s.price),
+
+    money(s.total),
+
+    s.pay,
+
+    s.empties
+   ]
+  )
  );
 
- document.getElementById('prodTable').innerHTML=table(
-  ['Fecha','Producidos','Rechazados'],
-  localDb.production.slice().reverse().map(p=>[
-   new Date(p.date).toLocaleString('es-CO'),
-   p.qty,
-   p.reject
-  ])
+ /* PRODUCCION */
+
+ document.getElementById('prodTable')
+ .innerHTML=table(
+  [
+   'Fecha',
+   'Producidos',
+   'Rechazados'
+  ],
+
+  localDb.production
+  .slice()
+  .reverse()
+  .map(
+   p=>[
+    new Date(p.date)
+    .toLocaleString('es-CO'),
+
+    p.qty,
+
+    p.reject
+   ]
+  )
  );
 
- const allProd=localDb.production.reduce((a,b)=>a+b.qty,0);
- const allSold=sales.reduce((a,b)=>a+b.qty,0);
- const recovered=sales.reduce((a,b)=>a+b.empties,0);
+ /* INVENTARIO */
 
- document.getElementById('iFull').textContent=Math.max(0,allProd-allSold);
- document.getElementById('iSold').textContent=allSold;
- document.getElementById('iEmpty').textContent=recovered;
+ const allProd=
+ localDb.production.reduce(
+  (a,b)=>a+b.qty,
+  0
+ );
 
- document.getElementById('map').innerHTML=
- clients.map((c,i)=>`
-  <div class="pin"
-   style="left:${8+(i*17)%78}%;top:${15+(i*23)%70}%">
-   📍 ${c.name}
-  </div>
- `).join('');
+ const allSold=
+ sales.reduce(
+  (a,b)=>a+b.qty,
+  0
+ );
 
- document.getElementById('routeList').innerHTML=
+ const recovered=
+ sales.reduce(
+  (a,b)=>a+b.empties,
+  0
+ );
+
+ document.getElementById('iFull')
+ .textContent=
+ Math.max(
+  0,
+  allProd-allSold
+ );
+
+ document.getElementById('iSold')
+ .textContent=
+ allSold;
+
+ document.getElementById('iEmpty')
+ .textContent=
+ recovered;
+
+ /* MAPA VISUAL */
+
+ document.getElementById('map')
+ .innerHTML=
  clients.length
  ?
- clients.map((c,i)=>
-  `<div style="padding:7px 0">
-   <b>Ruta ${1+(i%3)}</b> · ${c.name} · ${c.address||'Sin dirección'}
-  </div>`
+ clients.map(
+  (c,i)=>`
+   <div
+    class="pin"
+    style="
+     left:${8+(i*17)%75}%;
+     top:${15+(i*23)%65}%
+    ">
+    📍 ${escapeHtml(c.name)}
+   </div>
+  `
  ).join('')
  :
- 'No hay clientes registrados.';
+ `
+  <div style="
+   position:absolute;
+   z-index:3;
+   left:50%;
+   top:50%;
+   transform:translate(-50%,-50%);
+   color:#536a6e;
+   text-align:center">
+   No hay clientes para mostrar
+  </div>
+ `;
+
+ /* LISTA RUTAS + GOOGLE MAPS */
+
+ document.getElementById('routeList')
+ .innerHTML=
+ clients.length
+ ?
+ clients.map(
+  c=>`
+   <div class="routeCard">
+
+    <div class="routeInfo">
+
+     <div class="routeName">
+      📍 ${escapeHtml(c.name)}
+     </div>
+
+     <div class="routeAddress">
+      ${
+       c.address
+       ?
+       escapeHtml(c.address)
+       :
+       'Sin dirección registrada'
+      }
+     </div>
+
+     ${
+      c.phone
+      ?
+      `<div class="routeAddress">
+        📱 ${escapeHtml(c.phone)}
+       </div>`
+      :
+      ''
+     }
+
+    </div>
+
+    ${
+     c.address
+     ?
+     `<button
+       class="mapBtn"
+       data-route-map="${c.id}">
+       🧭 Ir con Google Maps
+      </button>`
+     :
+     ''
+    }
+
+   </div>
+  `
+ ).join('')
+ :
+ `
+  <div style="color:#6b7d82">
+   No hay clientes registrados.
+  </div>
+ `;
+
+ document.querySelectorAll(
+  '[data-route-map]'
+ ).forEach(
+  button=>{
+
+   button.onclick=()=>{
+
+    const id=
+    Number(
+     button.dataset.routeMap
+    );
+
+    const client=
+    clients.find(
+     c=>c.id===id
+    );
+
+    if(client){
+     openMaps(client.address);
+    }
+   };
+  }
+ );
 }
+
+/* =========================
+   TABLAS GENERALES
+========================= */
 
 function table(headers,rows){
 
  return `
  <table>
+
   <thead>
-   <tr>${headers.map(x=>`<th>${x}</th>`).join('')}</tr>
+   <tr>
+    ${
+     headers.map(
+      x=>`<th>${escapeHtml(x)}</th>`
+     ).join('')
+    }
+   </tr>
   </thead>
+
   <tbody>
+
    ${
     rows.length
     ?
-    rows.map(r=>`
-     <tr>${r.map(x=>`<td>${x??''}</td>`).join('')}</tr>
-    `).join('')
+    rows.map(
+     r=>`
+      <tr>
+       ${
+        r.map(
+         x=>`<td>${escapeHtml(x??'')}</td>`
+        ).join('')
+       }
+      </tr>
+     `
+    ).join('')
     :
-    `<tr><td colspan="${headers.length}" style="text-align:center;color:#6b7d82;padding:30px">
-     No hay registros.
-    </td></tr>`
+    `
+     <tr>
+      <td
+       colspan="${headers.length}"
+       style="
+        text-align:center;
+        color:#6b7d82;
+        padding:30px">
+       No hay registros.
+      </td>
+     </tr>
+    `
    }
+
   </tbody>
- </table>`;
+
+ </table>
+ `;
 }
+
+/* =========================
+   EXPORTAR CSV
+========================= */
 
 function exportCSV(){
 
  const rows=[
-  ['Fecha','Cliente','Cantidad','Precio','Total','Pago','Envases','Observaciones'],
-  ...sales.map(s=>[
-   s.date,
-   clientName(s.clientId),
-   s.qty,
-   s.price,
-   s.total,
-   s.pay,
-   s.empties,
-   s.notes
-  ])
+  [
+   'Fecha',
+   'Cliente',
+   'Cantidad',
+   'Precio',
+   'Total',
+   'Pago',
+   'Envases',
+   'Observaciones'
+  ],
+
+  ...sales.map(
+   s=>[
+    s.date,
+    clientName(s.clientId),
+    s.qty,
+    s.price,
+    s.total,
+    s.pay,
+    s.empties,
+    s.notes
+   ]
+  )
  ];
 
- const blob=new Blob(
-  [rows.map(r=>
-   r.map(v=>`"${String(v??'').replaceAll('"','""')}"`).join(';')
-  ).join('\n')],
-  {type:'text/csv;charset=utf-8'}
+ const blob=
+ new Blob(
+  [
+   rows.map(
+    r=>
+    r.map(
+     v=>
+     `"${String(v??'').replaceAll('"','""')}"`
+    ).join(';')
+   ).join('\n')
+  ],
+  {
+   type:'text/csv;charset=utf-8'
+  }
  );
 
- const url=URL.createObjectURL(blob);
- const a=document.createElement('a');
+ const url=
+ URL.createObjectURL(blob);
+
+ const a=
+ document.createElement('a');
 
  a.href=url;
- a.download='ventas_agua_del_bosque.csv';
+
+ a.download=
+ 'ventas_agua_del_bosque.csv';
+
  a.click();
 
  URL.revokeObjectURL(url);
 }
 
+/* =========================
+   BORRAR SOLO PRODUCCION LOCAL
+========================= */
+
 function resetDemo(){
 
- if(confirm(
-  '¿Borrar únicamente la producción local de prueba? Clientes y ventas de Supabase NO serán eliminados.'
- )){
-  localDb={production:[]};
-  localStorage.setItem(KEY,JSON.stringify(localDb));
+ if(
+  confirm(
+   '¿Borrar únicamente la producción local de prueba? Clientes y ventas de Supabase NO serán eliminados.'
+  )
+ ){
+
+  localDb={
+   production:[]
+  };
+
+  localStorage.setItem(
+   KEY,
+   JSON.stringify(localDb)
+  );
+
   render();
  }
 }
 
+/* =========================
+   INICIO
+========================= */
+
 setDate();
+
 checkSession();
 
-supabaseClient.auth.onAuthStateChange((event,session)=>{
- if(event==='SIGNED_OUT'){
-  document.getElementById('app').style.display='none';
-  document.getElementById('loginScreen').style.display='flex';
+supabaseClient.auth
+.onAuthStateChange(
+ (event,session)=>{
+
+  if(event==='SIGNED_OUT'){
+
+   document.getElementById('app')
+   .style.display='none';
+
+   document.getElementById('loginScreen')
+   .style.display='flex';
+  }
  }
-});
+);
+
 </script>
 
 </body>
