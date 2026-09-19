@@ -900,17 +900,18 @@ td{font-size:14px}
  <h1 class="sectionTitle">Producción</h1>
 
  <p class="sectionSub">
-  Temporalmente este módulo continúa guardándose en el navegador.
+  Los registros de producción se almacenan directamente en Supabase.
  </p>
 
  <div class="formCard">
 
   <div class="formGrid">
-   <input id="pqty" type="number" placeholder="Garrafones producidos">
-   <input id="preject" type="number" value="0" placeholder="Rechazados">
+   <input id="pqty" type="number" min="1" placeholder="Garrafones producidos">
+   <input id="preject" type="number" min="0" value="0" placeholder="Rechazados">
+   <input id="pnotes" placeholder="Observaciones">
   </div>
 
-  <button class="primaryBtn" style="margin-top:12px" onclick="addProduction()">
+  <button id="saveProductionBtn" class="primaryBtn" style="margin-top:12px" onclick="addProduction()">
    Registrar producción
   </button>
 
@@ -986,10 +987,6 @@ td{font-size:14px}
    📥 Exportar ventas CSV
   </button>
 
-  <button class="dangerBtn" onclick="resetDemo()">
-   Borrar producción local de prueba
-  </button>
-
  </div>
 
 </section>
@@ -1018,19 +1015,9 @@ window.supabase.createClient(
  SUPABASE_PUBLISHABLE_KEY
 );
 
-const KEY='adb_control_v2';
-
-let localDb=JSON.parse(
- localStorage.getItem(KEY) ||
- '{"production":[]}'
-);
-
-if(!Array.isArray(localDb.production)){
- localDb.production=[];
-}
-
 let clients=[];
 let sales=[];
+let production=[];
 
 let capturedLatitude=null;
 let capturedLongitude=null;
@@ -1565,6 +1552,8 @@ async function showApplication(user){
 
  await loadSales();
 
+ await loadProduction();
+
  render();
 }
 
@@ -1986,20 +1975,52 @@ async function addSale(){
 }
 
 /* =========================
-   PRODUCCION LOCAL
+   PRODUCCION SUPABASE
 ========================= */
 
-function saveLocal(){
+async function loadProduction(){
 
- localStorage.setItem(
-  KEY,
-  JSON.stringify(localDb)
+ const {data,error}=
+ await supabaseClient
+ .from('produccion')
+ .select('*')
+ .order(
+  'created_at',
+  {ascending:false}
  );
 
- render();
+ if(error){
+
+  console.error(error);
+
+  production=[];
+
+  alert(
+   'No fue posible cargar la producción.'
+  );
+
+  return;
+ }
+
+ production=(data||[]).map(row=>({
+
+  id:Number(row.id),
+
+  qty:
+  Number(row.cantidad_producida)||0,
+
+  reject:
+  Number(row.rechazados)||0,
+
+  notes:
+  row.observaciones||'',
+
+  date:
+  row.created_at
+ }));
 }
 
-function addProduction(){
+async function addProduction(){
 
  const qty=
  Number(
@@ -2013,7 +2034,14 @@ function addProduction(){
   .value
  )||0;
 
- if(!qty || qty<=0){
+ const notes=
+ document.getElementById('pnotes')
+ .value.trim();
+
+ const button=
+ document.getElementById('saveProductionBtn');
+
+ if(!Number.isInteger(qty) || qty<=0){
 
   alert(
    'Ingrese una cantidad válida.'
@@ -2022,17 +2050,65 @@ function addProduction(){
   return;
  }
 
- localDb.production.push({
+ if(
+  !Number.isInteger(reject) ||
+  reject<0
+ ){
 
-  id:Date.now(),
+  alert(
+   'Ingrese una cantidad válida de rechazados.'
+  );
 
-  qty:qty,
+  return;
+ }
 
-  reject:reject,
+ button.disabled=true;
 
-  date:
-  new Date().toISOString()
- });
+ button.textContent=
+ 'Guardando producción...';
+
+ const {data,error}=
+ await supabaseClient
+ .from('produccion')
+ .insert({
+
+  cantidad_producida:qty,
+
+  rechazados:reject,
+
+  observaciones:
+  notes||null
+
+ })
+ .select()
+ .single();
+
+ button.disabled=false;
+
+ button.textContent=
+ 'Registrar producción';
+
+ if(error){
+
+  console.error(error);
+
+  alert(
+   'ATENCIÓN: la producción NO fue guardada. No la dé por registrada.'
+  );
+
+  return;
+ }
+
+ if(!data || !data.id){
+
+  alert(
+   'Supabase no confirmó el registro de producción.'
+  );
+
+  return;
+ }
+
+ await loadProduction();
 
  document.getElementById('pqty')
  .value='';
@@ -2040,7 +2116,14 @@ function addProduction(){
  document.getElementById('preject')
  .value='0';
 
- saveLocal();
+ document.getElementById('pnotes')
+ .value='';
+
+ render();
+
+ alert(
+  'Producción guardada correctamente en la base de datos.'
+ );
 }
 
 /* =========================
@@ -2395,27 +2478,27 @@ function render(){
   [
    'Fecha',
    'Producidos',
-   'Rechazados'
+   'Rechazados',
+   'Observaciones'
   ],
 
-  localDb.production
-  .slice()
-  .reverse()
-  .map(p=>[
+  production.map(p=>[
 
    new Date(p.date)
    .toLocaleString('es-CO'),
 
    p.qty,
 
-   p.reject
+   p.reject,
+
+   p.notes
   ])
  );
 
  /* INVENTARIO */
 
  const allProd=
- localDb.production.reduce(
+ production.reduce(
   (a,b)=>a+b.qty,
   0
  );
@@ -2691,29 +2774,6 @@ function exportCSV(){
  a.click();
 
  URL.revokeObjectURL(url);
-}
-
-/* =========================
-   BORRAR PRODUCCION LOCAL
-========================= */
-
-function resetDemo(){
-
- if(confirm(
-  '¿Borrar únicamente la producción local de prueba? Clientes y ventas de Supabase NO serán eliminados.'
- )){
-
-  localDb={
-   production:[]
-  };
-
-  localStorage.setItem(
-   KEY,
-   JSON.stringify(localDb)
-  );
-
-  render();
- }
 }
 
 /* =========================
