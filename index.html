@@ -135,7 +135,87 @@ function localDateInputValue(date=new Date()){return `${date.getFullYear()}-${St
 function setDate(){const now=new Date();document.getElementById('dateText').textContent=now.toLocaleDateString('es-CO',{weekday:'long',day:'numeric',month:'long',year:'numeric'});const hour=now.getHours();let greeting='Buenos días';if(hour>=12&&hour<18)greeting='Buenas tardes';if(hour>=18)greeting='Buenas noches';document.getElementById('welcomeText').textContent=greeting+', bienvenido a Agua del Bosque'}
 
 function resetCapturedLocation(){capturedLatitude=null;capturedLongitude=null;capturedAccuracy=null;const status=document.getElementById('gpsStatus');if(status){status.className='gpsStatus';status.textContent='Ubicación todavía no capturada.'}}
-function captureLocation(){const button=document.getElementById('captureGpsBtn'),status=document.getElementById('gpsStatus');if(!navigator.geolocation){status.className='gpsStatus gpsError';status.textContent='Este dispositivo no permite obtener la ubicación.';return}button.disabled=true;button.textContent='📡 Obteniendo ubicación...';status.className='gpsStatus';status.textContent='Permita el acceso a la ubicación cuando el dispositivo lo solicite.';navigator.geolocation.getCurrentPosition(position=>{capturedLatitude=position.coords.latitude;capturedLongitude=position.coords.longitude;capturedAccuracy=Math.round(position.coords.accuracy||0);button.disabled=false;button.textContent='📍 Actualizar ubicación';status.className='gpsStatus gpsSuccess';status.textContent=capturedAccuracy?'✅ Ubicación capturada · precisión aproximada: '+capturedAccuracy+' metros':'✅ Ubicación capturada correctamente.'},error=>{button.disabled=false;button.textContent='📍 Capturar ubicación actual';status.className='gpsStatus gpsError';status.textContent=error.code===1?'No se autorizó el acceso a la ubicación.':error.code===2?'No fue posible determinar la ubicación. Revise el GPS.':error.code===3?'La ubicación tardó demasiado. Intente nuevamente.':'No fue posible obtener la ubicación.'},{enableHighAccuracy:true,timeout:15000,maximumAge:0})}
+function captureLocation(){
+ const button=document.getElementById('captureGpsBtn'),status=document.getElementById('gpsStatus');
+ if(!navigator.geolocation){status.className='gpsStatus gpsError';status.textContent='Este dispositivo no permite obtener la ubicación.';return}
+
+ capturedLatitude=null;
+ capturedLongitude=null;
+ capturedAccuracy=null;
+
+ button.disabled=true;
+ button.textContent='📡 Buscando mejor ubicación...';
+ status.className='gpsStatus';
+ status.textContent='Buscando GPS de alta precisión. Mantenga el celular quieto y, si es posible, con vista al cielo...';
+
+ let bestPosition=null;
+ let finished=false;
+ let watchId=null;
+ const TARGET_ACCURACY=10;
+ const MAX_ACCEPTABLE_ACCURACY=15;
+ const SEARCH_TIME=15000;
+
+ const finishCapture=()=>{
+  if(finished)return;
+  finished=true;
+  if(watchId!==null)navigator.geolocation.clearWatch(watchId);
+  button.disabled=false;
+  button.textContent='📍 Actualizar ubicación';
+
+  if(!bestPosition){
+   status.className='gpsStatus gpsError';
+   status.textContent='No fue posible obtener una ubicación. Revise que el GPS esté activado e intente nuevamente.';
+   return;
+  }
+
+  const accuracy=Math.round(bestPosition.coords.accuracy||9999);
+
+  if(accuracy>MAX_ACCEPTABLE_ACCURACY){
+   capturedLatitude=null;
+   capturedLongitude=null;
+   capturedAccuracy=null;
+   status.className='gpsStatus gpsError';
+   status.textContent='⚠️ Precisión insuficiente: ±'+accuracy+' m. Acérquese a una zona abierta y vuelva a intentar. No se guardará esta ubicación.';
+   return;
+  }
+
+  capturedLatitude=bestPosition.coords.latitude;
+  capturedLongitude=bestPosition.coords.longitude;
+  capturedAccuracy=accuracy;
+  status.className='gpsStatus gpsSuccess';
+  status.textContent='✅ GPS listo · mejor precisión: ±'+accuracy+' m';
+ };
+
+ watchId=navigator.geolocation.watchPosition(
+  position=>{
+   const accuracy=Number(position.coords.accuracy)||9999;
+   if(!bestPosition || accuracy<Number(bestPosition.coords.accuracy||9999)){
+    bestPosition=position;
+    const shown=Math.round(accuracy);
+    status.className='gpsStatus';
+    status.textContent='📡 Mejor precisión encontrada: ±'+shown+' m. Buscando una lectura aún mejor...';
+   }
+   if(accuracy<=TARGET_ACCURACY)finishCapture();
+  },
+  error=>{
+   if(finished)return;
+   if(error.code===1){
+    finished=true;
+    if(watchId!==null)navigator.geolocation.clearWatch(watchId);
+    button.disabled=false;
+    button.textContent='📍 Capturar ubicación actual';
+    status.className='gpsStatus gpsError';
+    status.textContent='No se autorizó el acceso a la ubicación.';
+   }else if(!bestPosition && error.code===2){
+    status.className='gpsStatus gpsError';
+    status.textContent='Buscando señal GPS... asegúrese de tener la ubicación del celular activada.';
+   }
+  },
+  {enableHighAccuracy:true,maximumAge:0,timeout:12000}
+ );
+
+ setTimeout(finishCapture,SEARCH_TIME);
+}
 
 function hasGps(c){return c.lat!==null&&c.lng!==null&&Number.isFinite(Number(c.lat))&&Number.isFinite(Number(c.lng))}
 function getMapsUrl(c){if(hasGps(c))return 'https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(Number(c.lat)+','+Number(c.lng));const address=String(c.address||'').trim();return address?'https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(address+', Villavicencio, Meta, Colombia'):''}
