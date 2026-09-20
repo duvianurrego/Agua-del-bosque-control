@@ -163,14 +163,68 @@ async function loadProduction(){const {data,error}=await supabaseClient.from('pr
 async function addProduction(){const qty=Number(document.getElementById('pqty').value),reject=Number(document.getElementById('preject').value)||0,notes=document.getElementById('pnotes').value.trim(),button=document.getElementById('saveProductionBtn');if(!Number.isInteger(qty)||qty<=0)return alert('Ingrese una cantidad válida.');if(!Number.isInteger(reject)||reject<0)return alert('Ingrese una cantidad válida de rechazados.');button.disabled=true;button.textContent='Guardando producción...';const {data,error}=await supabaseClient.from('produccion').insert({cantidad_producida:qty,rechazados:reject,observaciones:notes||null}).select().single();button.disabled=false;button.textContent='Registrar producción';if(error){console.error(error);return alert('ATENCIÓN: la producción NO fue guardada. No la dé por registrada.')}if(!data?.id)return alert('Supabase no confirmó el registro de producción.');await loadProduction();document.getElementById('pqty').value='';document.getElementById('preject').value='0';document.getElementById('pnotes').value='';render();alert('Producción guardada correctamente en la base de datos.')}
 
 /* PEDIDOS */
-async function loadOrders(){const {data,error}=await supabaseClient.from('pedidos').select('*').order('fecha_entrega',{ascending:true});if(error){console.error(error);orders=[];alert('No fue posible cargar los pedidos.');return}orders=(data||[]).map(r=>({id:Number(r.id),clientId:Number(r.cliente_id),qty:Number(r.cantidad)||0,price:Number(r.precio_unitario)||0,total:Number(r.total)||0,status:r.estado||'Pendiente',notes:r.observaciones||'',delivery:r.fecha_entrega,pay:r.metodo_pago||'',address:r.direccion_entrega||'',lat:r.latitud_entrega==null?null:Number(r.latitud_entrega),lng:r.longitud_entrega==null?null:Number(r.longitud_entrega),created:r.created_at}))}
+async function loadOrders(){const {data,error}=await supabaseClient.from('pedidos').select('*').order('fecha_entrega',{ascending:true});if(error){console.error(error);orders=[];alert('No fue posible cargar los pedidos.');return}orders=(data||[]).map(r=>({id:Number(r.id),clientId:Number(r.cliente_id),qty:Number(r.cantidad)||0,price:Number(r.precio_unitario)||0,total:Number(r.total)||0,status:r.estado||'Pendiente',notes:r.observaciones||'',delivery:r.fecha_entrega,pay:r.metodo_pago||'',address:r.direccion_entrega||'',lat:r.latitud_entrega==null?null:Number(r.latitud_entrega),lng:r.longitud_entrega==null?null:Number(r.longitud_entrega),saleId:r.venta_id==null?null:Number(r.venta_id),created:r.created_at}))}
 function updateOrderClientLocation(){const id=Number(document.getElementById('oclient').value),box=document.getElementById('orderClientLocation'),c=clients.find(x=>x.id===id);if(!c){box.textContent='Seleccione un cliente para ver la dirección de entrega.';return}box.innerHTML='📍 <b>Entrega:</b> '+escapeHtml(c.address||'Sin dirección escrita')+(hasGps(c)?' · GPS registrado':' · Sin GPS registrado')}
 async function addOrder(){const clientId=Number(document.getElementById('oclient').value),qty=Number(document.getElementById('oqty').value),price=Number(document.getElementById('oprice').value),deliveryValue=document.getElementById('odelivery').value,pay=document.getElementById('opay').value,notes=document.getElementById('onotes').value.trim(),button=document.getElementById('saveOrderBtn'),client=clients.find(c=>c.id===clientId);if(!client)return alert('Seleccione un cliente.');if(!Number.isInteger(qty)||qty<=0)return alert('Ingrese una cantidad válida.');if(!Number.isFinite(price)||price<=0)return alert('Ingrese un precio válido.');if(!deliveryValue)return alert('Seleccione la fecha y hora de entrega.');const deliveryDate=new Date(deliveryValue);if(Number.isNaN(deliveryDate.getTime()))return alert('La fecha de entrega no es válida.');button.disabled=true;button.textContent='Guardando pedido...';const {data,error}=await supabaseClient.from('pedidos').insert({cliente_id:clientId,cantidad:qty,precio_unitario:price,total:qty*price,estado:'Pendiente',observaciones:notes||null,fecha_entrega:deliveryDate.toISOString(),metodo_pago:pay,direccion_entrega:client.address||null,latitud_entrega:hasGps(client)?Number(client.lat):null,longitud_entrega:hasGps(client)?Number(client.lng):null}).select().single();button.disabled=false;button.textContent='Guardar pedido';if(error){console.error(error);return alert('ATENCIÓN: el pedido NO fue guardado. No lo dé por registrado.')}if(!data?.id)return alert('Supabase no confirmó el pedido.');await loadOrders();document.getElementById('oqty').value='1';document.getElementById('onotes').value='';render();alert('Pedido guardado correctamente en la base de datos.')}
 async function updateOrderStatus(id,status){if(!['Pendiente','En ruta','Entregado','Cancelado'].includes(status))return;const {data,error}=await supabaseClient.from('pedidos').update({estado:status}).eq('id',Number(id)).select().single();if(error||!data){console.error(error);return alert('ATENCIÓN: el estado NO fue actualizado en la base de datos.')}await loadOrders();render();alert('Estado actualizado a: '+status)}
+async function convertOrderToSale(id){
+ const order=orders.find(x=>x.id===Number(id));
+ if(!order)return alert('No se encontró el pedido.');
+ if(order.status!=='Entregado')return alert('Solo un pedido Entregado puede convertirse en venta.');
+ if(order.saleId!==null)return alert('Este pedido ya fue convertido en la Venta #'+order.saleId+'.');
+ if(!confirm('¿Registrar este pedido entregado como venta? Supabase evitará que se convierta dos veces.'))return;
+
+ const {data,error}=await supabaseClient.rpc('convertir_pedido_a_venta',{p_pedido_id:Number(id)});
+ if(error){
+   console.error(error);
+   if(String(error.message||'').includes('ya fue convertido')){
+     await loadOrders(); await loadSales(); render();
+     return alert('Este pedido ya había sido convertido en venta.');
+   }
+   return alert('ATENCIÓN: no se pudo convertir el pedido en venta. No lo dé por registrado.');
+ }
+ const saleId=Number(data);
+ await loadOrders();
+ await loadSales();
+ render();
+ if(!Number.isFinite(saleId)||saleId<=0){
+   return alert('La operación respondió sin un número de venta válido. Revise los registros antes de repetirla.');
+ }
+ alert('Pedido convertido correctamente en la Venta #'+saleId+'.');
+}
 function showAllOrders(){document.getElementById('orderDateFilter').value='';renderOrders()}
 function showTodayOrders(){document.getElementById('orderDateFilter').value=localDateInputValue();renderOrders()}
 function orderStatusBadge(status){const cls=status==='Pendiente'?'badgePending':status==='En ruta'?'badgeRoute':status==='Entregado'?'badgeDelivered':'badgeCancelled';return `<span class="badge ${cls}">${escapeHtml(status)}</span>`}
-function renderOrders(){const el=document.getElementById('ordersTable');if(!el)return;const dateFilter=document.getElementById('orderDateFilter').value,statusFilter=document.getElementById('orderStatusFilter').value;const filtered=orders.filter(o=>(!dateFilter||localDateKey(o.delivery)===dateFilter)&&(!statusFilter||o.status===statusFilter));el.innerHTML=`<table><thead><tr><th>Entrega</th><th>Cliente</th><th>Cantidad</th><th>Total</th><th>Pago</th><th>Estado</th><th>Dirección</th><th>Acciones</th></tr></thead><tbody>${filtered.length?filtered.map(o=>{let actions='';if(o.status==='Pendiente')actions+=`<button class="statusBtn" onclick="updateOrderStatus(${o.id},'En ruta')">🚚 En ruta</button><button class="dangerBtn" onclick="updateOrderStatus(${o.id},'Cancelado')">Cancelar</button>`;else if(o.status==='En ruta')actions+=`<button class="statusBtn" onclick="updateOrderStatus(${o.id},'Entregado')">✅ Entregado</button><button class="dangerBtn" onclick="updateOrderStatus(${o.id},'Cancelado')">Cancelar</button>`;if(getOrderMapsUrl(o))actions+=`<button class="mapBtn" onclick="openOrderMaps(${o.id})">🧭 Navegar</button>`;return `<tr><td>${escapeHtml(o.delivery?new Date(o.delivery).toLocaleString('es-CO'):'Sin fecha')}</td><td><b>${escapeHtml(clientName(o.clientId))}</b></td><td>${o.qty}</td><td>${escapeHtml(money(o.total))}</td><td>${escapeHtml(o.pay)}</td><td>${orderStatusBadge(o.status)}</td><td>${escapeHtml(o.address||'—')}</td><td>${actions||'—'}</td></tr>`}).join(''):`<tr><td colspan="8" style="text-align:center;color:#6b7d82;padding:30px">No hay pedidos para este filtro.</td></tr>`}</tbody></table>`}
+function renderOrders(){
+ const el=document.getElementById('ordersTable');
+ if(!el)return;
+ const dateFilter=document.getElementById('orderDateFilter').value;
+ const statusFilter=document.getElementById('orderStatusFilter').value;
+ const filtered=orders.filter(o=>(!dateFilter||localDateKey(o.delivery)===dateFilter)&&(!statusFilter||o.status===statusFilter));
+
+ el.innerHTML=`<table><thead><tr><th>Entrega</th><th>Cliente</th><th>Cantidad</th><th>Total</th><th>Pago</th><th>Estado</th><th>Venta</th><th>Dirección</th><th>Acciones</th></tr></thead><tbody>${
+ filtered.length ? filtered.map(o=>{
+   let actions='';
+   if(o.status==='Pendiente'){
+     actions+=`<button class="statusBtn" onclick="updateOrderStatus(${o.id},'En ruta')">🚚 En ruta</button>`;
+     actions+=`<button class="dangerBtn" onclick="updateOrderStatus(${o.id},'Cancelado')">Cancelar</button>`;
+   }else if(o.status==='En ruta'){
+     actions+=`<button class="statusBtn" onclick="updateOrderStatus(${o.id},'Entregado')">✅ Entregado</button>`;
+     actions+=`<button class="dangerBtn" onclick="updateOrderStatus(${o.id},'Cancelado')">Cancelar</button>`;
+   }else if(o.status==='Entregado' && o.saleId===null){
+     actions+=`<button class="statusBtn" onclick="convertOrderToSale(${o.id})">💰 Registrar venta</button>`;
+   }
+   if(getOrderMapsUrl(o)){
+     actions+=`<button class="mapBtn" onclick="openOrderMaps(${o.id})">🧭 Navegar</button>`;
+   }
+   const saleCell=o.saleId!==null
+     ? `<span class="badge badgeDelivered">Venta #${o.saleId}</span>`
+     : '<span class="noGpsBadge">No convertida</span>';
+   return `<tr><td>${escapeHtml(o.delivery?new Date(o.delivery).toLocaleString('es-CO'):'Sin fecha')}</td><td><b>${escapeHtml(clientName(o.clientId))}</b></td><td>${o.qty}</td><td>${escapeHtml(money(o.total))}</td><td>${escapeHtml(o.pay)}</td><td>${orderStatusBadge(o.status)}</td><td>${saleCell}</td><td>${escapeHtml(o.address||'—')}</td><td>${actions||'—'}</td></tr>`;
+ }).join('')
+ : `<tr><td colspan="9" style="text-align:center;color:#6b7d82;padding:30px">No hay pedidos para este filtro.</td></tr>`
+ }</tbody></table>`;
+}
 
 function show(id,button){document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.menuBtn').forEach(x=>x.classList.remove('active'));if(button)button.classList.add('active');if(window.innerWidth<=760)document.getElementById('sidebar').classList.remove('open');render();if(id==='rutas')setTimeout(()=>{initializeRealMap();if(realMap){realMap.invalidateSize();updateMapMarkers()}},150)}
 function openPanel(id){show(id,document.querySelector('.menuBtn[data-panel="'+id+'"]'))}
